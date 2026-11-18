@@ -1,0 +1,94 @@
+import fs from "node:fs";
+import path from "node:path";
+import { load as loadYaml } from "js-yaml";
+import Image from "@11ty/eleventy-img";
+
+// Read every .yml entry in a content folder (Pages CMS collections).
+function readCollection(dir) {
+  if (!fs.existsSync(dir)) return [];
+  return fs
+    .readdirSync(dir)
+    .filter((f) => f.endsWith(".yml") || f.endsWith(".yaml"))
+    .sort()
+    .map((f) => ({ file: f, ...(loadYaml(fs.readFileSync(path.join(dir, f), "utf8")) || {}) }));
+}
+
+function readFile(file) {
+  if (!fs.existsSync(file)) return {};
+  return loadYaml(fs.readFileSync(file, "utf8")) || {};
+}
+
+export default function (eleventyConfig) {
+  // Fixed design assets and scripts
+  eleventyConfig.addPassthroughCopy({ "src/img": "img", "src/js": "js", "media/docs": "media/docs" });
+  eleventyConfig.addPassthroughCopy({
+    "node_modules/pdfjs-dist/build/pdf.min.mjs": "js/pdfjs/pdf.min.mjs",
+    "node_modules/pdfjs-dist/build/pdf.worker.min.mjs": "js/pdfjs/pdf.worker.min.mjs",
+  });
+
+  // Editable content
+  eleventyConfig.addGlobalData("inicio", () => readFile("content/inicio.yml"));
+  eleventyConfig.addGlobalData("informe", () => readFile("content/informe.yml"));
+  // Newest first (Pages CMS names new entries by creation time)
+  eleventyConfig.addGlobalData("galeria", () => readCollection("content/galeria").filter((g) => g.imagen).reverse());
+  eleventyConfig.addGlobalData("testimonios", () => readCollection("content/testimonios").filter((t) => t.cita || t.quote).reverse());
+  // Events: dated ones in date order, undated ("to be announced") last
+  eleventyConfig.addGlobalData("talleres", () =>
+    readCollection("content/talleres").sort((a, b) => {
+      if (!a.fecha && !b.fecha) return 0;
+      if (!a.fecha) return 1;
+      if (!b.fecha) return -1;
+      return String(a.fecha).localeCompare(String(b.fecha));
+    })
+  );
+
+  // Site-wide settings
+  eleventyConfig.addGlobalData("site", { email: "mujeresartesanasdekingston@gmail.com" });
+
+  // E-mail protection: escape the text, then turn every address into a link with no
+  // readable address in the HTML (user and domain stored reversed, without the @).
+  // A small script on the page turns it back into a normal mailto: link.
+  const esc = (t) => String(t ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const rev = (t) => t.split("").reverse().join("");
+  eleventyConfig.addFilter("emails", (text) =>
+    esc(text).replace(/([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\.[A-Za-z]{2,})/g, (m, user, domain) =>
+      `<a class="em" href="#" data-u="${rev(user)}" data-d="${rev(domain)}">${user} (arroba / at) ${domain.replace(/\./g, " · ")}</a>`
+    )
+  );
+
+  // Format an event date in Spanish or English, e.g. "sábado 6 de diciembre, 11:00"
+  eleventyConfig.addFilter("fecha", (value, lang) => {
+    if (!value) return lang === "en" ? "Date to be announced" : "Fecha por anunciar";
+    const s = String(value);
+    const d = new Date(s.length <= 10 ? s + "T12:00" : s);
+    if (isNaN(d)) return s;
+    const locale = lang === "en" ? "en-US" : "es-US";
+    const day = d.toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+    const hasTime = s.length > 10;
+    const time = hasTime ? d.toLocaleTimeString(locale, { hour: "numeric", minute: "2-digit" }) : "";
+    return hasTime ? `${day}, ${time}` : day;
+  });
+  eleventyConfig.addFilter("iso", (value) => (value ? String(value) : ""));
+
+  // Resize uploaded photos (phone photos can be huge) into web-friendly sizes.
+  eleventyConfig.addAsyncShortcode("foto", async (src, alt = "", cls = "", sizes = "(max-width: 700px) 100vw, 50vw") => {
+    if (!src) return "";
+    const input = String(src).replace(/^\//, "");
+    if (!fs.existsSync(input)) return `<!-- missing image: ${src} -->`;
+    const meta = await Image(input, {
+      widths: [480, 960, 1600],
+      formats: ["webp", "jpeg"],
+      outputDir: "_site/img/opt/",
+      urlPath: "/img/opt/",
+    });
+    const full = meta.jpeg[meta.jpeg.length - 1].url;
+    const html = Image.generateHTML(meta, { alt, sizes, loading: "lazy", decoding: "async", class: cls || undefined });
+    return html.replace("<img ", `<img data-full="${full}" `);
+  });
+
+  return {
+    dir: { input: "src", output: "_site" },
+    templateFormats: ["njk"],
+    htmlTemplateEngine: "njk",
+  };
+}

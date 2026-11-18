@@ -1,0 +1,168 @@
+media:
+  - name: images
+    label: Fotos
+    input: media/images
+    output: /media/images
+    categories: [image]
+    rename: safe
+  - name: docs
+    label: Documentos
+    input: media/docs
+    output: /media/docs
+    extensions: [pdf]
+    rename: safe
+
+content:
+  - name: inicio
+    label: Inicio (texto)
+    type: file
+    path: content/inicio.yml
+    format: yaml
+    fields:
+      - name: lema
+        label: Frase principal (español)
+        type: text
+        required: true
+      - name: tagline
+        label: Main sentence (English)
+        type: text
+      - name: titulo_mes
+        label: Título «Cada mes» (español)
+        type: string
+      - name: title_month
+        label: "«Every month» heading (English)"
+        type: string
+      - name: tarjetas
+        label: Tarjetas «Cada mes»
+        type: object
+        list: true
+        fields:
+          - name: titulo
+            label: Título (español)
+            type: string
+          - name: title
+            label: Title (English)
+            type: string
+          - name: texto
+            label: Texto (español)
+            type: text
+          - name: text
+            label: Text (English)
+            type: text
+
+  - name: talleres
+    label: Talleres y eventos
+    type: collection
+    path: content/talleres
+    format: yaml
+    filename:
+      template: "{year}-{month}-{day}-{hour}{minute}-{primary}.yml"
+      field: create
+    view:
+      fields: [titulo, fecha]
+      primary: titulo
+      sort: [fecha, titulo]
+      default:
+        sort: fecha
+        order: desc
+    fields:
+      - name: titulo
+        label: Título (español)
+        type: string
+        required: true
+      - name: title
+        label: Title (English)
+        type: string
+      - name: fecha
+        label: Fecha y hora (vacío = «fecha por anunciar»)
+        type: date
+        options:
+          time: true
+          format: "yyyy-MM-dd'T'HH:mm"
+      - name: lugar
+        label: Lugar
+        type: string
+        default: 231 Clinton Ave., Kingston
+      - name: texto
+        label: Descripción (español)
+        type: text
+      - name: text
+        label: Description (English)
+        type: text
+      - name: imagen
+        label: Foto (opcional)
+        type: image
+        options:
+          media: images
+
+  - name: galeria
+    label: Galería
+    type: collection
+    path: content/galeria
+    format: yaml
+    filename:
+      template: "{year}-{month}-{day}-{hour}{minute}{second}.yml"
+      field: create
+    view:
+      fields: [imagen, pie]
+      primary: pie
+    fields:
+      - name: imagen
+        label: Foto
+        type: image
+        required: true
+        options:
+          media: images
+      - name: pie
+        label: Pie de foto (español)
+        type: string
+      - name: caption
+        label: Caption (English)
+        type: string
+
+  - name: testimonios
+    label: Testimonios
+    type: collection
+    path: content/testimonios
+    format: yaml
+    filename:
+      template: "{year}-{month}-{day}-{hour}{minute}{second}.yml"
+      field: create
+    view:
+      fields: [cita, autora]
+      primary: cita
+    fields:
+      - name: cita
+        label: Cita (español)
+        type: text
+        required: true
+      - name: quote
+        label: Quote (English)
+        type: text
+      - name: autora
+        label: Quién lo dice (español)
+        type: string
+        default: Una participante
+      - name: author
+        label: Who said it (English)
+        type: string
+        default: A participant
+
+  - name: informe
+    label: Informe (flipbook)
+    type: file
+    path: content/informe.yml
+    format: yaml
+    fields:
+      - name: pdf_es
+        label: Informe en español (PDF)
+        type: file
+        options:
+          media: docs
+          extensions: [pdf]
+      - name: pdf_en
+        label: Report in English (PDF)
+        type: file
+        options:
+          media: docs
+          extensions: [pdf]

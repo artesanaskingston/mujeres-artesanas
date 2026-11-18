@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+{% raw %}
 :root{
   --cream:#F4EEE3; --cream2:#EAE1D1; --paper:#FFFDF8; --ink:#2A3340; --soft:#5A6270;
   --green:#36A176; --dkgreen:#295740; --teal:#97D2CA; --yellow:#F7BC38;
@@ -163,6 +164,16 @@ body.fb-closed .stf__outerShadow,body.fb-closed .stf__hardShadow,body.fb-closed 
 .fb-ctrl button{all:unset;cursor:pointer;width:42px;height:42px;border-radius:50%;background:var(--ink);color:var(--cream);display:grid;place-items:center;font-size:1.1rem}
 .fb-ctrl button:disabled{opacity:.3;cursor:default}
 .fb-hint{font-size:.82rem;color:var(--soft)}
+.fb-ctrl .fb-fullbtn{margin-left:12px;background:transparent;color:var(--ink);border:1.5px solid var(--ink);font-size:1.15rem}
+.fb-full{position:fixed;inset:0;z-index:100;background:rgba(20,24,30,.96);display:flex;align-items:center;justify-content:center;padding:56px 24px 24px}
+.fb-full[hidden]{display:none}
+.fb-full-slot{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.fb-full .fb-stage{max-width:none;width:auto}
+.fb-full .fb-ctrl{color:#fff}
+.fb-full .fb-ctrl button{background:rgba(255,255,255,.15);color:#fff}
+.fb-full .fb-ctrl .fb-fullbtn{display:none}
+.fb-close{all:unset;cursor:pointer;position:absolute;top:14px;right:16px;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:1.3rem;background:rgba(255,255,255,.12)}
+.fb-close:hover{background:rgba(255,255,255,.25)}
 /* donate steps */
 .steps3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:22px 0 26px;max-width:960px}
 .steps3 div{background:var(--paper);border-radius:6px;padding:18px 20px;border-top:5px solid var(--c)}
@@ -187,6 +198,25 @@ body.fb-closed .stf__outerShadow,body.fb-closed .stf__hardShadow,body.fb-closed 
 .lb .lb-next{right:18px;top:50%;transform:translateY(-50%)}
 @media (max-width:700px){.lb .lb-prev,.lb .lb-next{top:auto;bottom:18px;transform:none}}
 
+/* events */
+.events{display:grid;gap:18px}
+.ev{display:grid;grid-template-columns:220px 1fr;gap:24px;background:var(--paper);border-left:6px solid var(--orange);border-radius:4px;padding:20px 24px;align-items:start}
+.ev.noimg{grid-template-columns:1fr}
+.ev-img img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:3px;display:block}
+.ev h3{margin:6px 0 4px}
+.ev .date{font:700 .78rem var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
+.ev-place{font-weight:500;margin:0 0 8px}
+.ev p:last-child{margin-bottom:0}
+.ev.past{border-left-color:var(--cream2)}
+.ev.past .date{color:var(--soft)}
+@media (max-width:760px){.ev{grid-template-columns:1fr}}
+/* testimonials */
+#testimonios{position:relative}
+.tq{margin:0;display:none}
+.tq.on{display:block;animation:fade .6s ease}
+.tq-dots{display:flex;justify-content:center;gap:10px;margin-top:22px}
+.tq-dots button{all:unset;cursor:pointer;width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.4)}
+.tq-dots button[aria-current="true"]{background:#fff}
 /* contact */
 form{display:grid;gap:14px}
 label{font:600 .78rem var(--sans);letter-spacing:.08em;text-transform:uppercase}
@@ -202,6 +232,7 @@ footer a{color:#fff}
 .fine{opacity:.75;font-size:.8rem}
 .deco{position:absolute;pointer-events:none}
 .rel{position:relative}
+{% endraw %}
 </style>
 </head>
 <body>
@@ -236,8 +267,8 @@ footer a{color:#fff}
       <div class="card">
         <div class="kicker"><span class="es">Arte · Tradición · Comunidad</span><span class="en">Art · Tradition · Community</span></div>
         <h1>Mujeres Artesanas de Kingston</h1>
-        <p class="es">Un espacio seguro donde mujeres inmigrantes hispanohablantes crean arte, comparten sus tradiciones y se apoyan unas a otras.</p>
-        <p class="en">A safe space where Spanish-speaking immigrant women make art, share their traditions and support one another.</p>
+        <p class="es">{{ inicio.lema }}</p>
+        <p class="en">{{ inicio.tagline }}</p>
         <div class="btns">
           <a class="btn g" href="#talleres"><span class="es">Próximo taller</span><span class="en">Next workshop</span></a>
           <a class="btn o" href="#quienes-somos"><span class="es">Conócenos</span><span class="en">About us</span></a>
@@ -260,27 +291,18 @@ footer a{color:#fff}
   <section class="paper" style="padding-top:64px">
     <div class="wrap">
       <div class="kicker"><span class="es">Cada mes</span><span class="en">Every month</span></div>
-      <h2 class="es">Un taller, una conversación, una comida</h2>
-      <h2 class="en">A workshop, a conversation, a meal</h2>
+      <h2 class="es">{{ inicio.titulo_mes }}</h2>
+      <h2 class="en">{{ inicio.title_month }}</h2>
       <div class="three" style="margin-top:28px">
+        {%- set iconos = ["hoja.png","ojo.png","casa.png"] %}
+        {%- for t in inicio.tarjetas %}
         <div class="feat" style="background:var(--cream)">
-          <img class="icon" src="img/hoja.png" alt="">
-          <h3 class="es">Talleres de arte</h3><h3 class="en">Art workshops</h3>
-          <p class="es">Pintura, tejido, cerámica, grabado y más, guiados por las propias integrantes, artistas invitadas y talleres locales.</p>
-          <p class="en">Painting, weaving, ceramics, printmaking and more, led by members, guest artists and local studios.</p>
+          <img class="icon" src="img/{{ iconos[loop.index0 % 3] }}" alt="">
+          <h3 class="es">{{ t.titulo }}</h3><h3 class="en">{{ t.title }}</h3>
+          <p class="es">{{ t.texto }}</p>
+          <p class="en">{{ t.text }}</p>
         </div>
-        <div class="feat" style="background:var(--cream)">
-          <img class="icon" src="img/ojo.png" alt="">
-          <h3 class="es">Conversación facilitada</h3><h3 class="en">Facilitated conversation</h3>
-          <p class="es">Cada encuentro empieza con una meditación. Una terapeuta de artes creativas acompaña al grupo cuando hace falta.</p>
-          <p class="en">Each gathering opens with a meditation. A creative arts therapist supports the group when needed.</p>
-        </div>
-        <div class="feat" style="background:var(--cream)">
-          <img class="icon" src="img/casa.png" alt="">
-          <h3 class="es">Comida compartida</h3><h3 class="en">A shared meal</h3>
-          <p class="es">Terminamos con una comida, a menudo de vendedores latinoamericanos locales, para probar los sabores de cada país.</p>
-          <p class="en">We end with a meal, often from local Latin American vendors, tasting the foods of each other's countries.</p>
-        </div>
+        {%- endfor %}
       </div>
     </div>
   </section>
@@ -288,10 +310,17 @@ footer a{color:#fff}
   <section class="band rel">
     <img class="deco" src="img/zig-amarillo.png" alt="" style="width:46px;left:6%;top:30px">
     <img class="deco" src="img/zig-turquesa.png" alt="" style="width:46px;right:7%;bottom:30px">
-    <div class="wrap quote">
-      <blockquote class="es">“Es un espacio sagrado. Y me siento afortunada de participar con un grupo de mujeres artistas y de Latinoamérica.”</blockquote>
-      <blockquote class="en">“It's a sacred space. And I feel fortunate to participate with a group of women who are artistic and who are from Latin America.”</blockquote>
-      <cite class="es">— Una participante</cite><cite class="en">— A participant</cite>
+    <div class="wrap quote" id="testimonios">
+      {%- for t in testimonios %}
+      <figure class="tq{% if loop.first %} on{% endif %}">
+        <blockquote class="es">“{{ t.cita or t.quote }}”</blockquote>
+        <blockquote class="en">“{{ t.quote or t.cita }}”</blockquote>
+        <cite class="es">— {{ t.autora or "Una participante" }}</cite><cite class="en">— {{ t.author or "A participant" }}</cite>
+      </figure>
+      {%- endfor %}
+      {%- if testimonios.length > 1 %}
+      <div class="tq-dots">{% for t in testimonios %}<button type="button" aria-label="{{ loop.index }}"{% if loop.first %} aria-current="true"{% endif %}></button>{% endfor %}</div>
+      {%- endif %}
     </div>
   </section>
 
@@ -299,11 +328,17 @@ footer a{color:#fff}
     <div class="wrap split">
       <div>
         <div class="kicker"><span class="es">Próximo encuentro</span><span class="en">Next gathering</span></div>
-        <div class="next">
+        <div class="next" id="home-next">
+          {%- set t = talleres[0] %}
+          {%- if t %}
+          <div class="date"><span class="es">{{ t.fecha | fecha("es") }}</span><span class="en">{{ t.fecha | fecha("en") }}</span></div>
+          <h3 class="es" style="margin-top:8px">{{ t.titulo }}</h3><h3 class="en" style="margin-top:8px">{{ t.title or t.titulo }}</h3>
+          <p style="margin:0">{{ t.lugar }}</p>
+          {%- else %}
           <div class="date"><span class="es">Fecha por anunciar</span><span class="en">Date to be announced</span></div>
-          <h3 class="es" style="margin-top:8px">Taller mensual de arte</h3><h3 class="en" style="margin-top:8px">Monthly art workshop</h3>
-          <p class="es" style="margin:0">231 Clinton Ave., Kingston. Escríbenos para más información.</p>
-          <p class="en" style="margin:0">231 Clinton Ave., Kingston. Write to us for details.</p>
+          <p class="es" style="margin:8px 0 0">Escríbenos para más información.</p><p class="en" style="margin:8px 0 0">Write to us for details.</p>
+          {%- endif %}
+          <p style="margin:12px 0 0"><a href="#talleres"><span class="es">Ver todos los talleres</span><span class="en">See all workshops</span></a></p>
         </div>
       </div>
       <img class="slice" src="img/exposicion.jpg" alt="Obras de las integrantes en la exposición de Radio Kingston">
@@ -365,11 +400,12 @@ footer a{color:#fff}
       <p class="es" style="max-width:680px">Preparado con Kingston Common Futures, que financió nuestro trabajo en 2025. Haz clic en una esquina o arrastra para pasar la página.</p>
       <p class="en" style="max-width:680px">Prepared with Kingston Common Futures, which funded our work in 2025. Click a corner or drag to turn the page.</p>
       <div class="fb-wrap" style="margin-top:26px">
-        <div class="fb-stage"><div id="flipbook"><div class="fb-page"><img src="img/informe/p-1.jpg" alt="Informe de impacto, página 1" loading="lazy"></div><div class="fb-page"><img src="img/informe/p-2.jpg" alt="Informe de impacto, página 2" loading="lazy"></div><div class="fb-page"><img src="img/informe/p-3.jpg" alt="Informe de impacto, página 3" loading="lazy"></div><div class="fb-page"><img src="img/informe/p-4.jpg" alt="Informe de impacto, página 4" loading="lazy"></div><div class="fb-page"><img src="img/informe/p-5.jpg" alt="Informe de impacto, página 5" loading="lazy"></div></div></div>
+        <div class="fb-stage" id="fb-stage" data-pdf-es="{{ informe.pdf_es }}" data-pdf-en="{{ informe.pdf_en }}"><p class="fb-hint" id="fb-loading">…</p></div>
         <div class="fb-ctrl">
           <button type="button" id="fb-prev" aria-label="Anterior / Previous">&#8592;</button>
-          <span id="fb-count">1 / 5</span>
+          <span id="fb-count"></span>
           <button type="button" id="fb-next" aria-label="Siguiente / Next">&#8594;</button>
+          <button type="button" id="fb-full" class="fb-fullbtn" aria-label="Pantalla completa / Full screen" title="Pantalla completa / Full screen">&#x26F6;</button>
         </div>
       </div>
     </div>
@@ -402,11 +438,26 @@ footer a{color:#fff}
   </div>
 
   <section style="padding-top:28px">
-    <div class="wrap" style="max-width:1120px">
-      <div class="next">
-        <div class="date"><span class="es">Próximo taller · fecha por anunciar</span><span class="en">Next workshop · date to be announced</span></div>
-        <p class="es" style="margin:8px 0 0">231 Clinton Ave., Kingston. Escríbenos a mujeresartesanasdekingston@gmail.com para participar.</p>
-        <p class="en" style="margin:8px 0 0">231 Clinton Ave., Kingston. Email mujeresartesanasdekingston@gmail.com to join.</p>
+    <div class="wrap">
+      <div class="kicker"><span class="es">Próximos</span><span class="en">Coming up</span></div>
+      <div class="events" id="ev-up">
+        {%- for t in talleres %}
+        <article class="ev{% if not t.imagen %} noimg{% endif %}" data-fecha="{{ t.fecha | iso }}">
+          {%- if t.imagen %}<div class="ev-img">{% foto t.imagen, t.titulo, "", "(max-width: 760px) 100vw, 220px" %}</div>{% endif %}
+          <div>
+            <div class="date"><span class="es">{{ t.fecha | fecha("es") }}</span><span class="en">{{ t.fecha | fecha("en") }}</span></div>
+            <h3 class="es">{{ t.titulo }}</h3><h3 class="en">{{ t.title or t.titulo }}</h3>
+            {%- if t.lugar %}<p class="ev-place">{{ t.lugar }}</p>{% endif %}
+            {%- if t.texto %}<p class="es">{{ t.texto | emails | safe }}</p>{% endif %}
+            {%- if t.text or t.texto %}<p class="en">{{ (t.text or t.texto) | emails | safe }}</p>{% endif %}
+          </div>
+        </article>
+        {%- endfor %}
+      </div>
+      <p class="ev-none" hidden><span class="es">Pronto anunciaremos el próximo taller. Escríbenos a {{ site.email | emails | safe }}.</span><span class="en">The next workshop will be announced soon. Email {{ site.email | emails | safe }}.</span></p>
+      <div id="ev-past-wrap" hidden>
+        <div class="kicker" style="margin-top:40px"><span class="es">Anteriores</span><span class="en">Past</span></div>
+        <div class="events" id="ev-past"></div>
       </div>
     </div>
   </section>
@@ -467,10 +518,9 @@ footer a{color:#fff}
   <section style="padding-top:28px">
     <div class="wrap">
       <div class="gallery">
-        <figure tabindex="0"><img src="img/ceramica.jpg" alt="Cerámica, cestería y tejidos"><figcaption><span class="es">Cerámica, cestería y tejidos</span><span class="en">Ceramics, baskets and weaving</span></figcaption></figure>
-        <figure tabindex="0"><img src="img/exposicion.jpg" alt="Exposición en Radio Kingston"><figcaption><span class="es">Exposición en Radio Kingston, junio de 2026</span><span class="en">Art show at Radio Kingston, June 2026</span></figcaption></figure>
-        <figure tabindex="0"><img src="img/textil.jpg" alt="Piezas sobre textil tradicional"><figcaption><span class="es">Piezas sobre textil tradicional</span><span class="en">Pieces on a traditional textile</span></figcaption></figure>
-        <figure tabindex="0"><img src="img/comida.jpg" alt="La comida compartida después del taller"><figcaption><span class="es">La comida compartida después del taller</span><span class="en">The shared meal after a workshop</span></figcaption></figure>
+        {%- for g in galeria %}
+        <figure tabindex="0">{% foto g.imagen, g.pie or g.caption %}<figcaption><span class="es">{{ g.pie or g.caption }}</span><span class="en">{{ g.caption or g.pie }}</span></figcaption></figure>
+        {%- endfor %}
       </div>
     </div>
   </section>
@@ -508,7 +558,7 @@ footer a{color:#fff}
         <h2 class="es">Escríbenos</h2><h2 class="en">Get in touch</h2>
         <p class="es">¿Quieres participar, ofrecer un taller o colaborar con el grupo? Nos encantaría saber de ti.</p>
         <p class="en">Would you like to join, offer a workshop or partner with the group? We'd love to hear from you.</p>
-        <p><strong>Email</strong><br><a href="mailto:mujeresartesanasdekingston@gmail.com">mujeresartesanasdekingston@gmail.com</a></p>
+        <p><strong>Email</strong><br>{{ site.email | emails | safe }}</p>
         <p><strong class="es">Dirección</strong><strong class="en">Address</strong><br>231 Clinton Ave.<br>Kingston, NY 12401</p>
       </div>
       <form id="contact" novalidate>
@@ -533,12 +583,17 @@ footer a{color:#fff}
   <button type="button" class="lb-next" aria-label="Siguiente / Next">&#8594;</button>
 </div>
 
+<div class="fb-full" id="fb-full-overlay" hidden role="dialog" aria-modal="true" aria-label="Informe">
+  <button type="button" class="fb-close" id="fb-close" aria-label="Cerrar / Close">&#10005;</button>
+  <div class="fb-full-slot" id="fb-full-slot"></div>
+</div>
+
 <footer>
   <div class="wrap">
     <img src="img/logo.png" alt="">
     <div style="flex:1;min-width:240px">
       <div class="name">Mujeres Artesanas de Kingston</div>
-      231 Clinton Ave., Kingston, NY 12401 · <a href="mailto:mujeresartesanasdekingston@gmail.com">mujeresartesanasdekingston@gmail.com</a>
+      231 Clinton Ave., Kingston, NY 12401 · {{ site.email | emails | safe }}
     </div>
     <div class="fine" style="text-align:right"><span class="es">Patrocinio fiscal:</span><span class="en">Fiscally sponsored by</span> Circle Creative Collective<br>© 2026 Mujeres Artesanas de Kingston</div>
   </div>
@@ -546,6 +601,7 @@ footer a{color:#fff}
 
 <script src="js/page-flip.browser.js"></script>
 <script>
+{% raw %}
 (function(){
   var views=["inicio","quienes-somos","talleres","galeria","apoyo"];
   function show(){
@@ -560,28 +616,106 @@ footer a{color:#fff}
     if(h==="quienes-somos") initFlip();
   }
 
-  var flip=null;
-  function initFlip(){
-    if(flip||typeof St==="undefined") return;
-    var el=document.getElementById("flipbook");
-    flip=new St.PageFlip(el,{width:500,height:647,size:"stretch",minWidth:260,maxWidth:520,minHeight:336,maxHeight:673,
-      showCover:true,maxShadowOpacity:.45,mobileScrollSupport:false,usePortrait:true,autoSize:true});
-    flip.loadFromHTML(el.querySelectorAll(".fb-page"));
+  var flip=null,flipUrl=null,flipBusy=false,fbPages=null,fbRatio=1.3,fbBig=false;
+  var stage=document.getElementById("fb-stage"),fbWrap=stage.parentNode,fbHome=fbWrap.parentNode,fbAnchor=fbWrap.nextSibling,
+      fbPrev=document.getElementById("fb-prev"),fbNext=document.getElementById("fb-next"),fbCnt=document.getElementById("fb-count"),
+      fbOverlay=document.getElementById("fb-full-overlay"),fbSlot=document.getElementById("fb-full-slot");
+  fbPrev.addEventListener("click",function(){if(flip)flip.flipPrev()});
+  fbNext.addEventListener("click",function(){if(flip)flip.flipNext()});
+  function pdfFor(lang){var es=stage.dataset.pdfEs,en=stage.dataset.pdfEn;return lang==="en"?(en||es):(es||en);}
+
+  function mountFlip(startAt){
+    if(flip){try{flip.destroy()}catch(e){} flip=null;}
+    stage.innerHTML="";
+    var book=document.createElement("div");book.id="flipbook";
+    fbPages.forEach(function(src,i){var d=document.createElement("div");d.className="fb-page";var im=document.createElement("img");im.alt="";im.src=src;d.appendChild(im);book.appendChild(d);});
+    stage.appendChild(book);
+    var opts={showCover:true,maxShadowOpacity:.45,mobileScrollSupport:false,usePortrait:true,autoSize:true,startPage:startAt||0};
+    if(fbBig){
+      var availH=window.innerHeight-150,availW=window.innerWidth-48,single=window.innerWidth<760;
+      var pw=Math.floor(Math.min(availH/fbRatio,single?availW:availW/2));
+      stage.style.width=(single?pw:pw*2)+"px";
+      opts.size="fixed";opts.width=pw;opts.height=Math.round(pw*fbRatio);
+    }else{
+      stage.style.width="";
+      opts.size="stretch";opts.width=500;opts.height=Math.round(500*fbRatio);
+      opts.minWidth=260;opts.maxWidth=520;opts.minHeight=Math.round(260*fbRatio);opts.maxHeight=Math.round(520*fbRatio);
+    }
+    var f=flip=new St.PageFlip(book,opts);
+    flip.loadFromHTML(book.querySelectorAll(".fb-page"));
     /* showCover makes the cover a stiff "hard" page; make it curl like the others */
-    function softCover(){try{flip.getPage(0).setDensity("soft")}catch(e){}}
+    function softCover(){try{f.getPage(0).setDensity("soft")}catch(e){}}
     softCover();flip.on("changeOrientation",softCover);
-    var n=flip.getPageCount(),prev=document.getElementById("fb-prev"),next=document.getElementById("fb-next"),cnt=document.getElementById("fb-count");
-    function upd(){var i=flip.getCurrentPageIndex();document.body.classList.toggle("fb-closed",i===0);cnt.textContent=(i+1)+" / "+n;prev.disabled=i===0;next.disabled=i>=n-1;}
+    var n=flip.getPageCount();
+    function upd(){var i=f.getCurrentPageIndex();document.body.classList.toggle("fb-closed",i===0);fbCnt.textContent=(i+1)+" / "+n;fbPrev.disabled=i===0;fbNext.disabled=i>=n-1;}
     flip.on("flip",upd);flip.on("changeOrientation",upd);upd();
-    prev.addEventListener("click",function(){flip.flipPrev()});
-    next.addEventListener("click",function(){flip.flipNext()});
   }
+
+  async function initFlip(){
+    if(typeof St==="undefined"||flipBusy) return;
+    var url=pdfFor(document.documentElement.lang);
+    if(!url){stage.closest("section").hidden=true;return;}
+    if(url===flipUrl&&flip) return;
+    flipBusy=true;
+    var es=document.documentElement.lang==="es";
+    try{
+      if(flip){try{flip.destroy()}catch(e){} flip=null;}
+      stage.innerHTML='<p class="fb-hint">'+(es?"Cargando el informe…":"Loading the report…")+'</p>';
+      var pdfjs=await import(new URL("js/pdfjs/pdf.min.mjs",location.href).href);
+      pdfjs.GlobalWorkerOptions.workerSrc=new URL("js/pdfjs/pdf.worker.min.mjs",location.href).href;
+      var doc=await pdfjs.getDocument({url:new URL(url,location.href).href}).promise;
+      var pages=[];
+      for(var i=1;i<=doc.numPages;i++){
+        var page=await doc.getPage(i),vp1=page.getViewport({scale:1});
+        if(i===1) fbRatio=vp1.height/vp1.width;
+        var vp=page.getViewport({scale:1600/vp1.height}),c=document.createElement("canvas");
+        c.width=Math.round(vp.width);c.height=Math.round(vp.height);
+        await page.render({canvasContext:c.getContext("2d"),canvas:c,viewport:vp}).promise;
+        pages.push(c.toDataURL("image/jpeg",.85));
+      }
+      fbPages=pages;flipUrl=url;
+      mountFlip(0);
+    }catch(e){
+      stage.innerHTML='<p class="fb-hint">'+(es?"No se pudo cargar el informe.":"The report could not be loaded.")+'</p>';
+    }
+    flipBusy=false;
+  }
+
+  /* full screen */
+  function openFull(){
+    if(!fbPages) return;
+    var at=flip?flip.getCurrentPageIndex():0;
+    fbSlot.appendChild(fbWrap);fbOverlay.hidden=false;document.body.style.overflow="hidden";fbBig=true;
+    try{if(fbOverlay.requestFullscreen)fbOverlay.requestFullscreen().catch(function(){});}catch(e){}
+    setTimeout(function(){mountFlip(at)},60);
+    document.getElementById("fb-close").focus();
+  }
+  function closeFull(){
+    if(fbOverlay.hidden) return;
+    var at=flip?flip.getCurrentPageIndex():0;
+    try{if(document.fullscreenElement)document.exitFullscreen().catch(function(){});}catch(e){}
+    fbHome.insertBefore(fbWrap,fbAnchor);fbOverlay.hidden=true;document.body.style.overflow="";fbBig=false;
+    mountFlip(at);
+  }
+  document.getElementById("fb-full").addEventListener("click",openFull);
+  document.getElementById("fb-close").addEventListener("click",closeFull);
+  document.addEventListener("keydown",function(e){
+    if(fbOverlay.hidden) return;
+    if(e.key==="Escape") closeFull();
+    else if(e.key==="ArrowRight"&&flip) flip.flipNext();
+    else if(e.key==="ArrowLeft"&&flip) flip.flipPrev();
+  });
+  document.addEventListener("fullscreenchange",function(){if(!document.fullscreenElement&&!fbOverlay.hidden)closeFull();});
+  var fbResize=null;
+  window.addEventListener("resize",function(){if(!fbBig)return;clearTimeout(fbResize);fbResize=setTimeout(function(){mountFlip(flip?flip.getCurrentPageIndex():0)},200);});
+
   window.addEventListener("hashchange",show); show();
 
   function setLang(l){
     document.documentElement.lang=l;
     document.querySelectorAll(".lang button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.lang===l?"true":"false")});
     try{localStorage.setItem("ma-lang",l)}catch(e){}
+    if(typeof flipUrl!=="undefined"&&flipUrl&&(location.hash==="#quienes-somos")) initFlip();
   }
   var saved=null; try{saved=localStorage.getItem("ma-lang")}catch(e){}
   setLang(saved==="en"?"en":"es");
@@ -589,14 +723,57 @@ footer a{color:#fff}
 
 
 
+  /* events: move past ones to "Past", pick the next one for the homepage */
+  (function(){
+    var up=document.getElementById("ev-up"),past=document.getElementById("ev-past");if(!up)return;
+    var today=new Date();today.setHours(0,0,0,0);
+    [].slice.call(up.querySelectorAll(".ev")).forEach(function(ev){
+      var f=ev.dataset.fecha;if(!f)return;
+      var d=new Date(f.length<=10?f+"T23:59":f);
+      if(d<today){ev.classList.add("past");past.insertBefore(ev,past.firstChild);}
+    });
+    document.getElementById("ev-past-wrap").hidden=!past.children.length;
+    var first=up.querySelector(".ev");
+    document.querySelector(".ev-none").hidden=!!first;
+    var hn=document.getElementById("home-next");
+    if(hn){
+      var link=hn.lastElementChild;
+      if(first){
+        hn.innerHTML="";
+        var body=first.querySelector(".ev-img")?first.children[1]:first.children[0];
+        [].slice.call(body.children).forEach(function(c){var k=c.cloneNode(true);hn.appendChild(k);});
+        hn.appendChild(link);
+      }else{
+        hn.innerHTML='<div class="date"><span class="es">Fecha por anunciar</span><span class="en">Date to be announced</span></div><p class="es" style="margin:8px 0 0">Escríbenos para más información.</p><p class="en" style="margin:8px 0 0">Write to us for details.</p>';
+        hn.appendChild(link);
+      }
+    }
+  })();
+
+  /* testimonials: rotate every 9 seconds */
+  (function(){
+    var box=document.getElementById("testimonios");if(!box)return;
+    var qs=[].slice.call(box.querySelectorAll(".tq")),dots=[].slice.call(box.querySelectorAll(".tq-dots button")),i=0,timer=null;
+    if(qs.length<2)return;
+    function go(n){qs[i].classList.remove("on");dots[i].removeAttribute("aria-current");i=(n+qs.length)%qs.length;qs[i].classList.add("on");dots[i].setAttribute("aria-current","true");}
+    function start(){clearInterval(timer);timer=setInterval(function(){go(i+1)},9000);}
+    dots.forEach(function(d,n){d.addEventListener("click",function(){go(n);start();})});
+    start();
+  })();
+
+  /* e-mail links: the address is stored reversed so bots can't read it */
+  [].slice.call(document.querySelectorAll("a.em")).forEach(function(a){
+    var r=function(x){return x.split("").reverse().join("")};var addr=r(a.dataset.u)+String.fromCharCode(64)+r(a.dataset.d);a.href="mailto:"+addr;a.textContent=addr;
+  });
+
   /* gallery slideshow */
   var figs=[].slice.call(document.querySelectorAll(".gallery figure")),lb=document.getElementById("lb"),
       lbImg=lb.querySelector("img"),lbCap=lb.querySelector(".lb-cap"),lbN=lb.querySelector(".lb-n"),cur=0,lastFocus=null;
   function cap(f){var l=document.documentElement.lang;var sp=f.querySelector("figcaption ."+l);return sp?sp.textContent:"";}
   function render(i){
-    cur=(i+figs.length)%figs.length;var f=figs[cur],im=f.querySelector("img");
+    cur=(i+figs.length)%figs.length;var f=figs[cur],im=f.querySelector("img");var full=im.dataset.full||im.currentSrc||im.src;
     lbImg.classList.add("fading");
-    setTimeout(function(){lbImg.src=im.src;lbImg.alt=im.alt;lbCap.textContent=cap(f);lbN.textContent=(cur+1)+" / "+figs.length;lbImg.classList.remove("fading");},120);
+    setTimeout(function(){lbImg.src=full;lbImg.alt=im.alt;lbCap.textContent=cap(f);lbN.textContent=(cur+1)+" / "+figs.length;lbImg.classList.remove("fading");},120);
   }
   function openLb(i){lastFocus=document.activeElement;lb.hidden=false;document.body.style.overflow="hidden";render(i);lb.querySelector(".lb-x").focus();}
   function closeLb(){lb.hidden=true;document.body.style.overflow="";if(lastFocus&&lastFocus.blur)lastFocus.blur();}
@@ -624,10 +801,11 @@ footer a{color:#fff}
     e.preventDefault();
     var es=document.documentElement.lang==="es";
     document.getElementById("formnote").textContent=es
-      ?"Este formulario todavía no está conectado. Por ahora, escríbenos a mujeresartesanasdekingston@gmail.com."
-      :"This form isn't connected yet. For now, please email mujeresartesanasdekingston@gmail.com.";
+      ?"Este formulario todavía no está conectado. Por ahora, escríbenos por email (ver a la izquierda)."
+      :"This form isn't connected yet. For now, please email us (see left).";
   });
 })();
+{% endraw %}
 </script>
 </body>
 </html>
