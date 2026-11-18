@@ -55,6 +55,8 @@ content:
     type: collection
     path: content/talleres
     format: yaml
+    operations:
+      rename: false
     filename:
       template: "{year}-{month}-{day}-{hour}{minute}{second}.yml"
       field: create
@@ -108,6 +110,8 @@ content:
     type: collection
     path: content/galeria
     format: yaml
+    operations:
+      rename: false
     filename:
       template: "{year}-{month}-{day}-{hour}{minute}{second}.yml"
       field: create
@@ -133,6 +137,8 @@ content:
     type: collection
     path: content/testimonios
     format: yaml
+    operations:
+      rename: false
     filename:
       template: "{year}-{month}-{day}-{hour}{minute}{second}.yml"
       field: create
@@ -161,6 +167,8 @@ content:
     type: collection
     path: content/informes
     format: yaml
+    operations:
+      rename: false
     filename:
       template: "{year}-{month}-{day}-{hour}{minute}{second}.yml"
       field: create
