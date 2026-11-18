@@ -85,10 +85,18 @@ content:
         default: 231 Clinton Ave., Kingston
       - name: texto
         label: Description (Spanish) / Descripción (español)
-        type: text
+        type: rich-text
+        options:
+          format: html
+          media: false
+          switcher: false
       - name: text
         label: Description (English) / Descripción (inglés)
-        type: text
+        type: rich-text
+        options:
+          format: html
+          media: false
+          switcher: false
       - name: imagen
         label: Photo (optional) / Foto (opcional)
         type: image

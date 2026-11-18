@@ -206,7 +206,10 @@ body.fb-closed .stf__outerShadow,body.fb-closed .stf__hardShadow,body.fb-closed 
 .ev h3{margin:6px 0 4px}
 .ev .date{font:700 .78rem var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
 .ev-place{font-weight:500;margin:0 0 8px}
-.ev p:last-child{margin-bottom:0}
+.ev p:last-child,.ev-desc>:last-child{margin-bottom:0}
+.ev-desc ul,.ev-desc ol{margin:0 0 1em;padding-left:1.3em}
+.ev-desc h3,.ev-desc h4{font-size:1.25rem;margin:.6em 0 .3em}
+.ev-desc blockquote{margin:0 0 1em;padding-left:14px;border-left:3px solid var(--cream2);font-style:italic}
 .ev.past{border-left-color:var(--cream2)}
 .ev.past .date{color:var(--soft)}
 @media (max-width:760px){.ev{grid-template-columns:1fr}}
@@ -448,8 +451,8 @@ footer a{color:#fff}
             <div class="date"><span class="es">{{ t.fecha | fecha("es") }}</span><span class="en">{{ t.fecha | fecha("en") }}</span></div>
             <h3 class="es">{{ t.titulo }}</h3><h3 class="en">{{ t.title or t.titulo }}</h3>
             {%- if t.lugar %}<p class="ev-place">{{ t.lugar }}</p>{% endif %}
-            {%- if t.texto %}<p class="es">{{ t.texto | emails | safe }}</p>{% endif %}
-            {%- if t.text or t.texto %}<p class="en">{{ (t.text or t.texto) | emails | safe }}</p>{% endif %}
+            {%- if t.texto %}<div class="es ev-desc">{{ t.texto | richtext | safe }}</div>{% endif %}
+            {%- if t.text or t.texto %}<div class="en ev-desc">{{ (t.text or t.texto) | richtext | safe }}</div>{% endif %}
           </div>
         </article>
         {%- endfor %}

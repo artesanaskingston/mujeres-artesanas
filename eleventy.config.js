@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { load as loadYaml } from "js-yaml";
 import Image from "@11ty/eleventy-img";
+import sanitizeHtml from "sanitize-html";
 
 // Read every .yml entry in a content folder (Pages CMS collections).
 function readCollection(dir) {
@@ -60,6 +61,36 @@ export default function (eleventyConfig) {
       `<a class="em" href="#" data-u="${rev(user)}" data-d="${rev(domain)}">${user} (arroba / at) ${domain.replace(/\./g, " · ")}</a>`
     )
   );
+
+  // Formatted text from the rich-text editor: keep simple formatting only,
+  // then protect e-mail addresses (in links and in plain text) the same way.
+  const emLink = (user, domain) =>
+    `<a class="em" href="#" data-u="${rev(user)}" data-d="${rev(domain)}">${user} (arroba / at) ${domain.replace(/\./g, " · ")}</a>`;
+  eleventyConfig.addFilter("richtext", (value) => {
+    const text = String(value ?? "").trim();
+    if (!text) return "";
+    if (!/<[a-z]/i.test(text)) {
+      // plain text: paragraphs from blank lines, line breaks kept
+      return text.split(/\n\s*\n/).map((para) =>
+        `<p>${esc(para).replace(/\n/g, "<br>").replace(/([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\.[A-Za-z]{2,})/g, (m, u, d) => emLink(u, d))}</p>`
+      ).join("");
+    }
+    let html = sanitizeHtml(text, {
+      allowedTags: ["p", "br", "strong", "b", "em", "i", "u", "s", "a", "ul", "ol", "li", "h3", "h4", "blockquote"],
+      allowedAttributes: { a: ["href", "target", "rel"] },
+      allowedSchemes: ["http", "https", "mailto"],
+      transformTags: {
+        a: (tag, attribs) => ({ tagName: "a", attribs: /^mailto:/i.test(attribs.href || "") ? attribs : { ...attribs, target: "_blank", rel: "noopener" } }),
+      },
+    });
+    // mailto links -> protected links
+    html = html.replace(/<a href="mailto:([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\.[A-Za-z]{2,})[^"]*"[^>]*>[\s\S]*?<\/a>/gi, (m, u, d) => emLink(u, d));
+    // plain addresses in the text (not inside tags)
+    html = html.split(/(<[^>]+>)/).map((part) =>
+      part.startsWith("<") ? part : part.replace(/([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\.[A-Za-z]{2,})/g, (m, u, d) => emLink(u, d))
+    ).join("");
+    return html;
+  });
 
   // Format an event date in Spanish or English, e.g. "sábado 6 de diciembre, 11:00"
   eleventyConfig.addFilter("fecha", (value, lang) => {

@@ -10,6 +10,7 @@
     "@11ty/eleventy": "^3.1.8",
     "@11ty/eleventy-img": "^7.1.1",
     "js-yaml": "^5.5.0",
-    "pdfjs-dist": "^6.5.438"
+    "pdfjs-dist": "^6.5.438",
+    "sanitize-html": "^2.18.2"
   }
 }
