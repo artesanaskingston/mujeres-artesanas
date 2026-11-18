@@ -164,6 +164,8 @@ body.fb-closed .stf__outerShadow,body.fb-closed .stf__hardShadow,body.fb-closed 
 .fb-ctrl button{all:unset;cursor:pointer;width:42px;height:42px;border-radius:50%;background:var(--ink);color:var(--cream);display:grid;place-items:center;font-size:1.1rem}
 .fb-ctrl button:disabled{opacity:.3;cursor:default}
 .fb-hint{font-size:.82rem;color:var(--soft)}
+.fb-intro{max-width:680px}
+.fb-intro>:last-child{margin-bottom:.4em}
 .fb-ctrl .fb-fullbtn{margin-left:12px;background:transparent;color:var(--ink);border:1.5px solid var(--ink);font-size:1.15rem}
 .fb-full{position:fixed;inset:0;z-index:100;background:rgba(20,24,30,.96);display:flex;align-items:center;justify-content:center;padding:56px 24px 24px}
 .fb-full[hidden]{display:none}
@@ -270,8 +272,8 @@ footer a{color:#fff}
       <div class="card">
         <div class="kicker"><span class="es">Arte · Tradición · Comunidad</span><span class="en">Art · Tradition · Community</span></div>
         <h1>Mujeres Artesanas de Kingston</h1>
-        <p class="es">{{ inicio.lema }}</p>
-        <p class="en">{{ inicio.tagline }}</p>
+        <p class="es">{{ inicio.lema | lineas | safe }}</p>
+        <p class="en">{{ inicio.tagline | lineas | safe }}</p>
         <div class="btns">
           <a class="btn g" href="#talleres"><span class="es">Próximo taller</span><span class="en">Next workshop</span></a>
           <a class="btn o" href="#quienes-somos"><span class="es">Conócenos</span><span class="en">About us</span></a>
@@ -302,8 +304,8 @@ footer a{color:#fff}
         <div class="feat" style="background:var(--cream)">
           <img class="icon" src="img/{{ iconos[loop.index0 % 3] }}" alt="">
           <h3 class="es">{{ t.titulo }}</h3><h3 class="en">{{ t.title }}</h3>
-          <p class="es">{{ t.texto }}</p>
-          <p class="en">{{ t.text }}</p>
+          <p class="es">{{ t.texto | lineas | safe }}</p>
+          <p class="en">{{ t.text | lineas | safe }}</p>
         </div>
         {%- endfor %}
       </div>
@@ -316,8 +318,8 @@ footer a{color:#fff}
     <div class="wrap quote" id="testimonios">
       {%- for t in testimonios %}
       <figure class="tq{% if loop.first %} on{% endif %}">
-        <blockquote class="es">“{{ t.cita or t.quote }}”</blockquote>
-        <blockquote class="en">“{{ t.quote or t.cita }}”</blockquote>
+        <blockquote class="es">“{{ (t.cita or t.quote) | lineas | safe }}”</blockquote>
+        <blockquote class="en">“{{ (t.quote or t.cita) | lineas | safe }}”</blockquote>
         <cite class="es">— {{ t.autora or "Una participante" }}</cite><cite class="en">— {{ t.author or "A participant" }}</cite>
       </figure>
       {%- endfor %}
@@ -400,8 +402,10 @@ footer a{color:#fff}
     <div class="wrap">
       <div class="kicker"><span class="es">{{ informe.titulo }}</span><span class="en">{{ informe.title or informe.titulo }}</span></div>
       <h2 class="es">Hojea nuestro informe</h2><h2 class="en">Flip through our report</h2>
-      <p class="es" style="max-width:680px">{% if informe.intro %}{{ informe.intro }} {% endif %}Haz clic en una esquina o arrastra para pasar la página.</p>
-      <p class="en" style="max-width:680px">{% if informe.intro_en or informe.intro %}{{ informe.intro_en or informe.intro }} {% endif %}Click a corner or drag to turn the page.</p>
+      {%- if informe.intro %}<div class="es fb-intro">{{ informe.intro | richtext | safe }}</div>{% endif %}
+      {%- if informe.intro_en or informe.intro %}<div class="en fb-intro">{{ (informe.intro_en or informe.intro) | richtext | safe }}</div>{% endif %}
+      <p class="es fb-hint" style="max-width:680px">Haz clic en una esquina o arrastra para pasar la página.</p>
+      <p class="en fb-hint" style="max-width:680px">Click a corner or drag to turn the page.</p>
       <div class="fb-wrap" style="margin-top:26px">
         <div class="fb-stage" id="fb-stage" data-pdf-es="{{ informe.pdf_es }}" data-pdf-en="{{ informe.pdf_en }}"><p class="fb-hint" id="fb-loading">…</p></div>
         <div class="fb-ctrl">

@@ -62,6 +62,14 @@ export default function (eleventyConfig) {
     )
   );
 
+  // Plain text that keeps the editor's line breaks (no other formatting)
+  eleventyConfig.addFilter("lineas", (value) =>
+    esc(String(value ?? "").trim())
+      .replace(/\n+/g, "<br>")
+      .replace(/([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\.[A-Za-z]{2,})/g, (m, u, d) =>
+        `<a class="em" href="#" data-u="${rev(u)}" data-d="${rev(d)}">${u} (arroba / at) ${d.replace(/\./g, " · ")}</a>`)
+  );
+
   // Formatted text from the rich-text editor: keep simple formatting only,
   // then protect e-mail addresses (in links and in plain text) the same way.
   const emLink = (user, domain) =>

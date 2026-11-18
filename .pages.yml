@@ -182,10 +182,18 @@ content:
         type: string
       - name: intro
         label: Introduction (Spanish) / Introducción (español)
-        type: text
+        type: rich-text
+        options:
+          format: html
+          media: false
+          switcher: false
       - name: intro_en
         label: Introduction (English) / Introducción (inglés)
-        type: text
+        type: rich-text
+        options:
+          format: html
+          media: false
+          switcher: false
       - name: pdf_es
         label: Report in Spanish / Informe en español (PDF)
         description: "If you upload only one of the two, it is used for both languages. / Si subes solo uno de los dos, se usa para ambos idiomas."
