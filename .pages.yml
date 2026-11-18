@@ -1,12 +1,12 @@
 media:
   - name: images
-    label: Fotos / Photos
+    label: Photos / Fotos
     input: media/images
     output: /media/images
     categories: [image]
     rename: safe
   - name: docs
-    label: Documentos / Documents
+    label: Documents / Documentos
     input: media/docs
     output: /media/docs
     extensions: [pdf]
@@ -14,44 +14,44 @@ media:
 
 content:
   - name: inicio
-    label: Inicio / Home
+    label: Home / Inicio
     type: file
     path: content/inicio.yml
     format: yaml
     fields:
       - name: lema
-        label: Frase principal (español) / Main sentence (Spanish)
+        label: Main sentence (Spanish) / Frase principal (español)
         type: text
         required: true
       - name: tagline
-        label: Frase principal (inglés) / Main sentence (English)
+        label: Main sentence (English) / Frase principal (inglés)
         type: text
       - name: titulo_mes
-        label: Título «Cada mes» (español) / «Every month» heading (Spanish)
+        label: «Every month» heading (Spanish) / Título «Cada mes» (español)
         type: string
       - name: title_month
-        label: Título «Cada mes» (inglés) / «Every month» heading (English)
+        label: «Every month» heading (English) / Título «Cada mes» (inglés)
         type: string
       - name: tarjetas
-        label: Tarjetas «Cada mes» / «Every month» cards
+        label: «Every month» cards / Tarjetas «Cada mes»
         type: object
         list: true
         fields:
           - name: titulo
-            label: Título (español) / Title (Spanish)
+            label: Title (Spanish) / Título (español)
             type: string
           - name: title
-            label: Título (inglés) / Title (English)
+            label: Title (English) / Título (inglés)
             type: string
           - name: texto
-            label: Texto (español) / Text (Spanish)
+            label: Text (Spanish) / Texto (español)
             type: text
           - name: text
-            label: Texto (inglés) / Text (English)
+            label: Text (English) / Texto (inglés)
             type: text
 
   - name: talleres
-    label: Talleres y eventos / Workshops & events
+    label: Workshops & events / Talleres y eventos
     type: collection
     path: content/talleres
     format: yaml
@@ -67,36 +67,36 @@ content:
         order: desc
     fields:
       - name: titulo
-        label: Título (español) / Title (Spanish)
+        label: Title (Spanish) / Título (español)
         type: string
         required: true
       - name: title
-        label: Título (inglés) / Title (English)
+        label: Title (English) / Título (inglés)
         type: string
       - name: fecha
-        label: Fecha y hora / Date and time (vacío = «por anunciar» / empty = «to be announced»)
+        label: Date and time / Fecha y hora (empty = «to be announced» / vacío = «por anunciar»)
         type: date
         options:
           time: true
           format: "yyyy-MM-dd'T'HH:mm"
       - name: lugar
-        label: Lugar / Place
+        label: Place / Lugar
         type: string
         default: 231 Clinton Ave., Kingston
       - name: texto
-        label: Descripción (español) / Description (Spanish)
+        label: Description (Spanish) / Descripción (español)
         type: text
       - name: text
-        label: Descripción (inglés) / Description (English)
+        label: Description (English) / Descripción (inglés)
         type: text
       - name: imagen
-        label: Foto (opcional) / Photo (optional)
+        label: Photo (optional) / Foto (opcional)
         type: image
         options:
           media: images
 
   - name: galeria
-    label: Galería / Gallery
+    label: Gallery / Galería
     type: collection
     path: content/galeria
     format: yaml
@@ -108,20 +108,20 @@ content:
       primary: pie
     fields:
       - name: imagen
-        label: Foto / Photo
+        label: Photo / Foto
         type: image
         required: true
         options:
           media: images
       - name: pie
-        label: Pie de foto (español) / Caption (Spanish)
+        label: Caption (Spanish) / Pie de foto (español)
         type: string
       - name: caption
-        label: Pie de foto (inglés) / Caption (English)
+        label: Caption (English) / Pie de foto (inglés)
         type: string
 
   - name: testimonios
-    label: Testimonios / Testimonials
+    label: Testimonials / Testimonios
     type: collection
     path: content/testimonios
     format: yaml
@@ -133,23 +133,23 @@ content:
       primary: cita
     fields:
       - name: cita
-        label: Cita (español) / Quote (Spanish)
+        label: Quote (Spanish) / Cita (español)
         type: text
         required: true
       - name: quote
-        label: Cita (inglés) / Quote (English)
+        label: Quote (English) / Cita (inglés)
         type: text
       - name: autora
-        label: Quién lo dice (español) / Who said it (Spanish)
+        label: Who said it (Spanish) / Quién lo dice (español)
         type: string
         default: Una participante
       - name: author
-        label: Quién lo dice (inglés) / Who said it (English)
+        label: Who said it (English) / Quién lo dice (inglés)
         type: string
         default: A participant
 
   - name: informes
-    label: Informes / Reports (flipbook)
+    label: Reports / Informes (flipbook)
     type: collection
     path: content/informes
     format: yaml
@@ -161,33 +161,33 @@ content:
       primary: titulo
     fields:
       - name: activo
-        label: Activo (se muestra en el sitio) / Active (shown on the site)
+        label: Active (shown on the site) / Activo (se muestra en el sitio)
         type: boolean
-        description: "El sitio muestra un solo informe a la vez. Si marcas varios como activos, se muestra el más reciente; si no hay ninguno activo, el flipbook no aparece. / The site shows one report at a time. If several are marked active, the newest one is shown; if none is active, the flipbook is hidden."
+        description: "The site shows one report at a time. If several are marked active, the newest one is shown; if none is active, the flipbook is hidden. / El sitio muestra un solo informe a la vez. Si marcas varios como activos, se muestra el más reciente; si no hay ninguno activo, el flipbook no aparece."
         default: false
       - name: titulo
-        label: Título (español) / Title (Spanish)
+        label: Title (Spanish) / Título (español)
         type: string
         required: true
       - name: title
-        label: Título (inglés) / Title (English)
+        label: Title (English) / Título (inglés)
         type: string
       - name: intro
-        label: Introducción (español) / Introduction (Spanish)
+        label: Introduction (Spanish) / Introducción (español)
         type: text
       - name: intro_en
-        label: Introducción (inglés) / Introduction (English)
+        label: Introduction (English) / Introducción (inglés)
         type: text
       - name: pdf_es
-        label: Informe en español / Report in Spanish (PDF)
-        description: "Si subes solo uno de los dos, se usa para ambos idiomas. / If you upload only one of the two, it is used for both languages."
+        label: Report in Spanish / Informe en español (PDF)
+        description: "If you upload only one of the two, it is used for both languages. / Si subes solo uno de los dos, se usa para ambos idiomas."
         type: file
         options:
           media: docs
           extensions: [pdf]
       - name: pdf_en
-        label: Informe en inglés / Report in English (PDF)
-        description: "Si subes solo uno de los dos, se usa para ambos idiomas. / If you upload only one of the two, it is used for both languages."
+        label: Report in English / Informe en inglés (PDF)
+        description: "If you upload only one of the two, it is used for both languages. / Si subes solo uno de los dos, se usa para ambos idiomas."
         type: file
         options:
           media: docs
