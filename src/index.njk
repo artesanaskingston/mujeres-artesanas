@@ -242,7 +242,7 @@ body.fb-closed .stf__outerShadow,body.fb-closed .stf__hardShadow,body.fb-closed 
 /* events */
 .events{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
 .ev{display:grid;grid-template-columns:220px 1fr;gap:24px;background:var(--paper);border-left:6px solid var(--orange);border-radius:4px;padding:20px 24px;align-items:start}
-.ev-ph{aspect-ratio:4/3;border-radius:3px;background:var(--cream2)}
+.ev-ph{aspect-ratio:4/3;border-radius:3px;background:var(--cream);display:flex;align-items:center;justify-content:center}.ev-img.ev-ph img{width:38%;height:auto;aspect-ratio:auto;object-fit:contain;border-radius:0;opacity:.9}
 .ev>*{min-width:0}
 .ev,.next{overflow-wrap:anywhere}
 a.em{overflow-wrap:anywhere}
@@ -562,7 +562,7 @@ footer a{color:#fff}
       <div class="events" id="ev-up">
         {%- for t in talleres %}
         <article class="ev" data-fecha="{{ t.fecha | iso }}">
-          {%- if t.imagen %}<div class="ev-img">{% foto t.imagen, t.titulo, "", "(max-width: 760px) 100vw, 220px" %}</div>{% else %}<div class="ev-img ev-ph" aria-hidden="true"></div>{% endif %}
+          {%- if t.imagen %}<div class="ev-img">{% foto t.imagen, t.titulo, "", "(max-width: 760px) 100vw, 220px" %}</div>{% else %}{% set fig = ["hoja.png","ojo.png","casa.png","zig-magenta.png"] %}<div class="ev-img ev-ph" aria-hidden="true"><img src="img/{{ fig[loop.index0 % 4] }}" alt=""></div>{% endif %}
           <div>
             <div class="ev-head">
               {{ cal(t) }}
