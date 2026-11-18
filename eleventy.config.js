@@ -37,7 +37,19 @@ export default function (eleventyConfig) {
     return activos.length ? activos[activos.length - 1] : {};
   });
   // Newest first (Pages CMS names new entries by creation time)
-  eleventyConfig.addGlobalData("galeria", () => readCollection("content/galeria").filter((g) => g.imagen).reverse());
+  // Gallery photos (newest first). A photo may belong to an optional group (Pages CMS reference = group file path).
+  const grupoId = (ref) => (ref ? path.basename(String(ref)).replace(/\.ya?ml$/, "") : "");
+  const fotosGaleria = () =>
+    readCollection("content/galeria").filter((g) => g.imagen).reverse().map((g) => ({ ...g, gid: grupoId(g.grupo) }));
+  eleventyConfig.addGlobalData("galeria", fotosGaleria);
+  // Groups that have at least one photo, newest group first.
+  eleventyConfig.addGlobalData("grupos", () => {
+    const usados = new Set(fotosGaleria().map((g) => g.gid).filter(Boolean));
+    return readCollection("content/galeria-grupos")
+      .map((g) => ({ ...g, id: g.file.replace(/\.ya?ml$/, "") }))
+      .filter((g) => (g.nombre || g.name) && usados.has(g.id))
+      .reverse();
+  });
   // Shop: newest first, like the gallery
   eleventyConfig.addGlobalData("tienda", () => readCollection("content/tienda").filter((t) => t.nombre || t.name).reverse());
   eleventyConfig.addFilter("precio", (v) => { const n = Number(v); return isNaN(n) || v === "" || v == null ? "" : "$" + (Number.isInteger(n) ? n : n.toFixed(2)); });

@@ -261,6 +261,38 @@ content:
       - name: caption
         label: Caption (English) / Pie de foto (inglés)
         type: string
+      - name: grupo
+        label: Group (optional) / Grupo (opcional)
+        description: "Pick a group to show this photo under a filter button at the top of the gallery. New groups are made under Gallery groups. / Elige un grupo para mostrar esta foto bajo un botón de filtro arriba de la galería. Los grupos nuevos se crean en Grupos de la galería."
+        type: reference
+        options:
+          collection: galeria_grupos
+          value: "{path}"
+          label: "{nombre} / {name}"
+
+  - name: galeria_grupos
+    label: Gallery groups / Grupos de la galería
+    description: "Optional. Each group becomes a filter button above the gallery (only once at least one photo uses it). Newest group first. / Opcional. Cada grupo se convierte en un botón de filtro sobre la galería (solo cuando al menos una foto lo usa). El grupo más nuevo primero."
+    type: collection
+    path: content/galeria-grupos
+    format: yaml
+    operations:
+      rename: false
+    filename:
+      template: "{year}-{month}-{day}-{hour}{minute}{second}.yml"
+      field: false
+    view:
+      fields: [nombre, name]
+      primary: nombre
+    fields:
+      - name: nombre
+        label: Group name (Spanish) / Nombre del grupo (español)
+        description: "Short, e.g. \"Cerámica, marzo 2026\". / Corto, p. ej. \"Cerámica, marzo 2026\"."
+        type: string
+        required: true
+      - name: name
+        label: Group name (English) / Nombre del grupo (inglés)
+        type: string
 
   - name: tienda
     label: Shop / Tienda

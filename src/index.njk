@@ -148,18 +148,20 @@ ul.dots li:before{content:"";position:absolute;left:0;top:.62em;width:10px;heigh
 .chip i{font-style:normal;color:var(--soft);font-weight:300}
 
 /* gallery: trapezium slices, 50/50 pairs, morph to full picture on hover */
-.gallery{--cut:90px;--g:16px;--h:320px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:0;row-gap:15.4px}
-/* row gap = perpendicular width of the diagonal gap: g*h/sqrt(h^2+cut^2) */
+.gallery{--cut:60px;--g:16px;--h:230px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:var(--g);row-gap:15.5px}
+/* pairs share a diagonal; row gap = perpendicular width of the diagonal gap: g*h/sqrt(h^2+cut^2) */
 .gallery figure{position:relative;margin:0;height:var(--h);overflow:hidden;outline:none;z-index:1;
-  width:calc(100% + (var(--cut) - var(--g)) / 2);
+  width:calc(100% + var(--cut) / 2);
   transition:clip-path .45s cubic-bezier(.4,0,.2,1)}
-.gallery figure:nth-child(even){margin-left:calc((var(--g) - var(--cut)) / 2)}
+.gallery figure:nth-child(even){margin-left:calc(var(--cut) / -2)}
 .gallery img{width:100%;height:100%;object-fit:cover}
 .gallery figure:nth-child(4n+1){clip-path:polygon(0 0,100% 0,calc(100% - var(--cut)) 100%,0 100%)}
 .gallery figure:nth-child(4n+2){clip-path:polygon(var(--cut) 0,100% 0,100% 100%,0 100%)}
 .gallery figure:nth-child(4n+3){clip-path:polygon(0 0,calc(100% - var(--cut)) 0,100% 100%,0 100%)}
 .gallery figure:nth-child(4n+4){clip-path:polygon(0 0,100% 0,100% 100%,var(--cut) 100%)}
 .gallery figure:nth-child(n):is(:hover,:focus-within){clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}
+/* a photo without a partner (odd count) gets straight edges */
+.gallery figure:nth-child(odd):last-child{width:100%;clip-path:none}
 /* the partner's diagonal straightens to vertical, keeping the gap, so nothing overlaps */
 @media (min-width:701px){
   .gallery figure:nth-child(odd):is(:hover,:focus-within) + figure{clip-path:polygon(var(--cut) 0,100% 0,100% 100%,var(--cut) 100%)}
@@ -170,12 +172,21 @@ ul.dots li:before{content:"";position:absolute;left:0;top:.62em;width:10px;heigh
 @media (hover:none){.gallery figcaption{opacity:1;transform:none}
   .gallery figure:nth-child(odd) figcaption{padding-right:calc(var(--cut) + 18px)}
   .gallery figure:nth-child(even) figcaption{padding-left:calc(var(--cut) + 18px)}}
+@media (max-width:960px){.gallery{--cut:90px;--h:300px;grid-template-columns:repeat(2,minmax(0,1fr));row-gap:15.3px}}
 @media (max-width:700px){
   .gallery{--cut:50px;--h:240px;grid-template-columns:1fr;row-gap:var(--g)}
+  .gallery.many{--h:160px;grid-template-columns:1fr 1fr;column-gap:10px;row-gap:10px}
+  .gallery.many figcaption{display:none}
   .gallery figure:nth-child(n){width:100%;margin-left:0}
   .gallery figure:nth-child(n),.gallery figure:nth-child(n):is(:hover,:focus-within){clip-path:none}
   .gallery figure:nth-child(n) figcaption{padding-left:18px;padding-right:18px}
 }
+
+.gal-filter{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
+.gal-filter button{all:unset;cursor:pointer;font:500 .85rem/1.2 var(--sans);padding:8px 16px;border:1.5px solid var(--ink);border-radius:20px}
+.gal-filter button[aria-pressed="true"]{background:var(--magenta);border-color:var(--magenta);color:#fff}
+.gal-filter button:focus-visible{outline:2px solid var(--magenta);outline-offset:2px}
+.gal-stash{display:none}
 
 /* flipbook */
 .fb-wrap{display:flex;flex-direction:column;align-items:center;gap:18px}
@@ -629,9 +640,17 @@ footer a{color:#fff}
 
   <section style="padding-top:28px">
     <div class="wrap">
-      <div class="gallery">
+      {%- if grupos.length %}
+      <div class="gal-filter" role="group" aria-label="Filtrar fotos / Filter photos">
+        <button type="button" data-g="" aria-pressed="true"><span class="es">Todas</span><span class="en">All</span></button>
+        {%- for gr in grupos %}
+        <button type="button" data-g="{{ gr.id }}" aria-pressed="false"><span class="es">{{ gr.nombre or gr.name }}</span><span class="en">{{ gr.name or gr.nombre }}</span></button>
+        {%- endfor %}
+      </div>
+      {%- endif %}
+      <div class="gallery{% if galeria.length > 6 %} many{% endif %}">
         {%- for g in galeria %}
-        <figure tabindex="0">{% foto g.imagen, g.pie or g.caption %}<figcaption><span class="es">{{ g.pie or g.caption }}</span><span class="en">{{ g.caption or g.pie }}</span></figcaption></figure>
+        <figure tabindex="0" data-g="{{ g.gid }}">{% foto g.imagen, g.pie or g.caption %}<figcaption><span class="es">{{ g.pie or g.caption }}</span><span class="en">{{ g.caption or g.pie }}</span></figcaption></figure>
         {%- endfor %}
       </div>
     </div>
@@ -946,7 +965,20 @@ footer a{color:#fff}
   });
 
   /* gallery slideshow */
-  var figs=[].slice.call(document.querySelectorAll(".gallery figure")),lb=document.getElementById("lb"),
+  var gal=document.querySelector(".gallery"),allFigs=[].slice.call(document.querySelectorAll(".gallery figure")),
+      figs=allFigs.slice(),stash=document.createElement("div");stash.className="gal-stash";if(gal)gal.after(stash);
+  function filtra(gid){
+    figs=allFigs.filter(function(f){return !gid||f.dataset.g===gid});
+    allFigs.forEach(function(f){(figs.indexOf(f)>-1?gal:stash).appendChild(f)});
+    gal.classList.toggle("many",figs.length>6);
+  }
+  [].forEach.call(document.querySelectorAll(".gal-filter button"),function(b,_,all){
+    b.addEventListener("click",function(){
+      [].forEach.call(b.parentNode.children,function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});
+      filtra(b.dataset.g);
+    });
+  });
+  var lb=document.getElementById("lb"),
       lbImg=lb.querySelector("img"),lbCap=lb.querySelector(".lb-cap"),lbN=lb.querySelector(".lb-n"),cur=0,lastFocus=null;
   function cap(f){var l=document.documentElement.lang;var sp=f.querySelector("figcaption ."+l);return sp?sp.textContent:"";}
   function render(i){
@@ -956,9 +988,9 @@ footer a{color:#fff}
   }
   function openLb(i){lastFocus=document.activeElement;lb.hidden=false;document.body.style.overflow="hidden";render(i);lb.querySelector(".lb-x").focus();}
   function closeLb(){try{if(document.fullscreenElement)document.exitFullscreen().catch(function(){});}catch(e){}lb.hidden=true;document.body.style.overflow="";if(lastFocus&&lastFocus.blur)lastFocus.blur();}
-  figs.forEach(function(f,i){
-    f.querySelector("img").addEventListener("click",function(){openLb(i)});
-    f.addEventListener("keydown",function(e){if(e.key==="Enter"){openLb(i)}});
+  allFigs.forEach(function(f){
+    f.querySelector("img").addEventListener("click",function(){openLb(figs.indexOf(f))});
+    f.addEventListener("keydown",function(e){if(e.key==="Enter"){openLb(figs.indexOf(f))}});
   });
   lb.querySelector(".lb-x").addEventListener("click",closeLb);
   var lbFs=lb.querySelector(".lb-fs");
