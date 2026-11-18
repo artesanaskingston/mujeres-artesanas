@@ -196,6 +196,10 @@ body.fb-closed .stf__outerShadow,body.fb-closed .stf__hardShadow,body.fb-closed 
 .lb button{all:unset;cursor:pointer;position:absolute;color:#fff;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:1.6rem;background:rgba(255,255,255,.1)}
 .lb button:hover,.lb button:focus-visible{background:rgba(255,255,255,.25)}
 .lb .lb-x{top:18px;right:18px}
+.lb .lb-fs{top:18px;right:82px}
+.lb .lb-fs[hidden]{display:none}
+.lb:fullscreen{background:#111}
+.lb:fullscreen img{max-width:98vw;max-height:88vh}
 .lb .lb-prev{left:18px;top:50%;transform:translateY(-50%)}
 .lb .lb-next{right:18px;top:50%;transform:translateY(-50%)}
 @media (max-width:700px){.lb .lb-prev,.lb .lb-next{top:auto;bottom:18px;transform:none}}
@@ -595,6 +599,7 @@ footer a{color:#fff}
 
 <div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Galería">
   <button type="button" class="lb-x" aria-label="Cerrar / Close">&#10005;</button>
+  <button type="button" class="lb-fs" aria-label="Pantalla completa / Full screen" title="Pantalla completa / Full screen" hidden>&#x26F6;</button>
   <button type="button" class="lb-prev" aria-label="Anterior / Previous">&#8592;</button>
   <img alt="">
   <div class="lb-cap"></div>
@@ -795,12 +800,20 @@ footer a{color:#fff}
     setTimeout(function(){lbImg.src=full;lbImg.alt=im.alt;lbCap.textContent=cap(f);lbN.textContent=(cur+1)+" / "+figs.length;lbImg.classList.remove("fading");},120);
   }
   function openLb(i){lastFocus=document.activeElement;lb.hidden=false;document.body.style.overflow="hidden";render(i);lb.querySelector(".lb-x").focus();}
-  function closeLb(){lb.hidden=true;document.body.style.overflow="";if(lastFocus&&lastFocus.blur)lastFocus.blur();}
+  function closeLb(){try{if(document.fullscreenElement)document.exitFullscreen().catch(function(){});}catch(e){}lb.hidden=true;document.body.style.overflow="";if(lastFocus&&lastFocus.blur)lastFocus.blur();}
   figs.forEach(function(f,i){
     f.querySelector("img").addEventListener("click",function(){openLb(i)});
     f.addEventListener("keydown",function(e){if(e.key==="Enter"){openLb(i)}});
   });
   lb.querySelector(".lb-x").addEventListener("click",closeLb);
+  var lbFs=lb.querySelector(".lb-fs");
+  if(document.fullscreenEnabled&&lb.requestFullscreen){
+    lbFs.hidden=false;
+    lbFs.addEventListener("click",function(){
+      if(document.fullscreenElement){document.exitFullscreen().catch(function(){});}
+      else{lb.requestFullscreen().catch(function(){});}
+    });
+  }
   lb.querySelector(".lb-prev").addEventListener("click",function(){render(cur-1)});
   lb.querySelector(".lb-next").addEventListener("click",function(){render(cur+1)});
   lb.addEventListener("click",function(e){if(e.target===lb)closeLb()});
