@@ -29,6 +29,7 @@ export default function (eleventyConfig) {
 
   // Editable content
   eleventyConfig.addGlobalData("inicio", () => readFile("content/inicio.yml"));
+  eleventyConfig.addGlobalData("encabezados", () => readFile("content/encabezados.yml"));
   // Reports for the flipbook: show the active one. If several are marked active,
   // the newest wins; if none is, the flipbook section is hidden.
   eleventyConfig.addGlobalData("informe", () => {
@@ -137,6 +138,18 @@ export default function (eleventyConfig) {
     const html = Image.generateHTML(meta, attrs);
     return html.replace("<img ", `<img data-full="${full}" `);
   });
+
+  // Header photos: a resized version, returned as a CSS background value
+  // (falls back to the given default when no photo is chosen).
+  eleventyConfig.addAsyncShortcode("fondo", async (src, fallback) => {
+    const input = src ? String(src).replace(/^\//, "") : "";
+    if (!input || !fs.existsSync(input)) return fallback ? `url(${fallback})` : "none";
+    const meta = await Image(input, { widths: [1000, 1800], formats: ["webp", "jpeg"], outputDir: "_site/img/opt/", urlPath: "/img/opt/" });
+    const jpg = meta.jpeg.map((m) => m.url), webp = meta.webp.map((m) => m.url);
+    // image-set lets the browser pick webp when it can
+    return `url(${jpg[jpg.length - 1]}); background-image: image-set(url(${webp[webp.length - 1]}) type('image/webp'), url(${jpg[jpg.length - 1]}) type('image/jpeg'))`;
+  });
+  eleventyConfig.addFilter("posicion", (p) => ({ top: "center 15%", bottom: "center 85%" }[p] || "center"));
 
   return {
     dir: { input: "src", output: "_site" },

@@ -83,7 +83,7 @@ section{padding:72px 0}
 @media (max-width:700px){.pagehead .banner{height:180px}.pagehead .banner.emblem{background-size:auto 110px}}
 
 /* hero */
-.hero{position:relative;min-height:560px;border-top:8px solid var(--green);display:flex;align-items:flex-end;background:url(img/ceramica.jpg) center 45%/cover;padding:0}
+.hero{position:relative;min-height:560px;border-top:8px solid var(--green);display:flex;align-items:flex-end;background-size:cover;background-repeat:no-repeat;padding:0}
 .hero:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(42,51,64,.35),rgba(42,51,64,0) 55%)}
 .hero .card{position:relative;z-index:1;background:rgba(244,238,227,.95);padding:34px 40px 30px;margin:0 0 56px;max-width:640px}
 .hero .card p{font-size:1.08rem;font-weight:400}
@@ -271,7 +271,7 @@ footer a{color:#fff}
 
 <!-- ============ INICIO ============ -->
 <div class="view" id="v-inicio" data-c="green">
-  <section class="hero">
+  <section class="hero" style="background-image:{% fondo encabezados.inicio.imagen, "img/ceramica.jpg" %};background-position:{{ encabezados.inicio.posicion | posicion }}">
     <div class="wrap" style="width:100%;position:relative">
       <div class="card">
         <div class="kicker"><span class="es">Arte · Tradición · Comunidad</span><span class="en">Art · Tradition · Community</span></div>
@@ -358,7 +358,11 @@ footer a{color:#fff}
 <!-- ============ QUIÉNES SOMOS ============ -->
 <div class="view" id="v-quienes-somos" data-c="yellow">
   <div class="pagehead">
+    {%- if encabezados.quienes_somos.imagen %}
+    <div class="banner" style="background-image:{% fondo encabezados.quienes_somos.imagen %};background-position:{{ encabezados.quienes_somos.posicion | posicion }}" role="img" aria-label=""></div>
+    {%- else %}
     <div class="banner emblem" style="background-image:url(img/logo.png);background-color:var(--teal)" role="img" aria-label=""></div>
+    {%- endif %}
     <div class="wrap intro">
       <h1><span class="es">Quiénes somos</span><span class="en">About</span></h1>
       <p class="alt"><span class="es">About</span><span class="en">Quiénes somos</span></p>
@@ -439,7 +443,7 @@ footer a{color:#fff}
 <!-- ============ TALLERES ============ -->
 <div class="view" id="v-talleres" data-c="orange">
   <div class="pagehead">
-    <div class="banner" style="background-image:url(img/textil.jpg)" role="img" aria-label=""></div>
+    <div class="banner" style="background-image:{% fondo encabezados.talleres.imagen, "img/textil.jpg" %};background-position:{{ encabezados.talleres.posicion | posicion }}" role="img" aria-label=""></div>
     <div class="wrap intro">
       <h1><span class="es">Talleres y eventos</span><span class="en">Workshops &amp; events</span></h1>
       <p class="alt"><span class="es">Workshops &amp; events</span><span class="en">Talleres y eventos</span></p>
@@ -517,7 +521,7 @@ footer a{color:#fff}
 <!-- ============ GALERÍA ============ -->
 <div class="view" id="v-galeria" data-c="magenta">
   <div class="pagehead">
-    <div class="banner" style="background-image:url(img/exposicion.jpg)" role="img" aria-label=""></div>
+    <div class="banner" style="background-image:{% fondo encabezados.galeria.imagen, "img/exposicion.jpg" %};background-position:{{ encabezados.galeria.posicion | posicion }}" role="img" aria-label=""></div>
     <div class="wrap intro">
       <h1><span class="es">Galería</span><span class="en">Gallery</span></h1>
       <p class="alt"><span class="es">Gallery</span><span class="en">Galería</span></p>
@@ -540,7 +544,11 @@ footer a{color:#fff}
 <!-- ============ APOYO ============ -->
 <div class="view" id="v-apoyo" data-c="blue">
   <div class="pagehead">
+    {%- if encabezados.apoyo.imagen %}
+    <div class="banner" style="background-image:{% fondo encabezados.apoyo.imagen %};background-position:{{ encabezados.apoyo.posicion | posicion }}" role="img" aria-label=""></div>
+    {%- else %}
     <div class="banner emblem" style="background-image:url(img/ojo.png);background-color:var(--yellow)" role="img" aria-label=""></div>
+    {%- endif %}
     <div class="wrap intro">
       <h1><span class="es">Apoyo y contacto</span><span class="en">Support &amp; contact</span></h1>
       <p class="alt"><span class="es">Support &amp; contact</span><span class="en">Apoyo y contacto</span></p>

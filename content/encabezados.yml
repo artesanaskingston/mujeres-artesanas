@@ -1,0 +1,15 @@
+inicio:
+  imagen: /media/images/ceramica.jpg
+  posicion: center
+quienes_somos:
+  imagen: ""
+  posicion: center
+talleres:
+  imagen: /media/images/textil.jpg
+  posicion: center
+galeria:
+  imagen: /media/images/exposicion.jpg
+  posicion: center
+apoyo:
+  imagen: ""
+  posicion: center

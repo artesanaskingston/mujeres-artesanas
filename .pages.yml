@@ -50,6 +50,115 @@ content:
             label: Text (English) / Texto (inglés)
             type: text
 
+  - name: encabezados
+    label: Page headers / Encabezados
+    type: file
+    path: content/encabezados.yml
+    format: yaml
+    fields:
+      - name: inicio
+        label: Home / Inicio
+        type: object
+        fields:
+          - name: imagen
+            label: Photo / Foto
+            type: image
+            options:
+              media: images
+          - name: posicion
+            label: Which part of the photo stays visible / Qué parte de la foto se ve
+            type: select
+            options:
+              values:
+                - value: top
+                  label: Top / Arriba
+                - value: center
+                  label: Center / Centro
+                - value: bottom
+                  label: Bottom / Abajo
+      - name: quienes_somos
+        label: About / Quiénes somos
+        type: object
+        fields:
+          - name: imagen
+            label: Photo / Foto
+            type: image
+            options:
+              media: images
+            description: "Empty = the logo on teal (as now). / Vacío = el logo sobre turquesa (como ahora)."
+          - name: posicion
+            label: Which part of the photo stays visible / Qué parte de la foto se ve
+            type: select
+            options:
+              values:
+                - value: top
+                  label: Top / Arriba
+                - value: center
+                  label: Center / Centro
+                - value: bottom
+                  label: Bottom / Abajo
+      - name: talleres
+        label: Workshops & events / Talleres y eventos
+        type: object
+        fields:
+          - name: imagen
+            label: Photo / Foto
+            type: image
+            options:
+              media: images
+          - name: posicion
+            label: Which part of the photo stays visible / Qué parte de la foto se ve
+            type: select
+            options:
+              values:
+                - value: top
+                  label: Top / Arriba
+                - value: center
+                  label: Center / Centro
+                - value: bottom
+                  label: Bottom / Abajo
+      - name: galeria
+        label: Gallery / Galería
+        type: object
+        fields:
+          - name: imagen
+            label: Photo / Foto
+            type: image
+            options:
+              media: images
+          - name: posicion
+            label: Which part of the photo stays visible / Qué parte de la foto se ve
+            type: select
+            options:
+              values:
+                - value: top
+                  label: Top / Arriba
+                - value: center
+                  label: Center / Centro
+                - value: bottom
+                  label: Bottom / Abajo
+      - name: apoyo
+        label: Support & contact / Apoyo y contacto
+        type: object
+        fields:
+          - name: imagen
+            label: Photo / Foto
+            type: image
+            options:
+              media: images
+            description: "Empty = the eye on yellow (as now). / Vacío = el ojo sobre amarillo (como ahora)."
+          - name: posicion
+            label: Which part of the photo stays visible / Qué parte de la foto se ve
+            type: select
+            options:
+              values:
+                - value: top
+                  label: Top / Arriba
+                - value: center
+                  label: Center / Centro
+                - value: bottom
+                  label: Bottom / Abajo
+
   - name: talleres
     label: Workshops & events / Talleres y eventos
     type: collection
