@@ -1,12 +1,12 @@
 media:
   - name: images
-    label: Fotos
+    label: Fotos / Photos
     input: media/images
     output: /media/images
     categories: [image]
     rename: safe
   - name: docs
-    label: Documentos
+    label: Documentos / Documents
     input: media/docs
     output: /media/docs
     extensions: [pdf]
@@ -14,44 +14,44 @@ media:
 
 content:
   - name: inicio
-    label: Inicio (texto)
+    label: Inicio / Home
     type: file
     path: content/inicio.yml
     format: yaml
     fields:
       - name: lema
-        label: Frase principal (español)
+        label: Frase principal (español) / Main sentence (Spanish)
         type: text
         required: true
       - name: tagline
-        label: Main sentence (English)
+        label: Frase principal (inglés) / Main sentence (English)
         type: text
       - name: titulo_mes
-        label: Título «Cada mes» (español)
+        label: Título «Cada mes» (español) / «Every month» heading (Spanish)
         type: string
       - name: title_month
-        label: "«Every month» heading (English)"
+        label: Título «Cada mes» (inglés) / «Every month» heading (English)
         type: string
       - name: tarjetas
-        label: Tarjetas «Cada mes»
+        label: Tarjetas «Cada mes» / «Every month» cards
         type: object
         list: true
         fields:
           - name: titulo
-            label: Título (español)
+            label: Título (español) / Title (Spanish)
             type: string
           - name: title
-            label: Title (English)
+            label: Título (inglés) / Title (English)
             type: string
           - name: texto
-            label: Texto (español)
+            label: Texto (español) / Text (Spanish)
             type: text
           - name: text
-            label: Text (English)
+            label: Texto (inglés) / Text (English)
             type: text
 
   - name: talleres
-    label: Talleres y eventos
+    label: Talleres y eventos / Workshops & events
     type: collection
     path: content/talleres
     format: yaml
@@ -67,36 +67,36 @@ content:
         order: desc
     fields:
       - name: titulo
-        label: Título (español)
+        label: Título (español) / Title (Spanish)
         type: string
         required: true
       - name: title
-        label: Title (English)
+        label: Título (inglés) / Title (English)
         type: string
       - name: fecha
-        label: Fecha y hora (vacío = «fecha por anunciar»)
+        label: Fecha y hora / Date and time (vacío = «por anunciar» / empty = «to be announced»)
         type: date
         options:
           time: true
           format: "yyyy-MM-dd'T'HH:mm"
       - name: lugar
-        label: Lugar
+        label: Lugar / Place
         type: string
         default: 231 Clinton Ave., Kingston
       - name: texto
-        label: Descripción (español)
+        label: Descripción (español) / Description (Spanish)
         type: text
       - name: text
-        label: Description (English)
+        label: Descripción (inglés) / Description (English)
         type: text
       - name: imagen
-        label: Foto (opcional)
+        label: Foto (opcional) / Photo (optional)
         type: image
         options:
           media: images
 
   - name: galeria
-    label: Galería
+    label: Galería / Gallery
     type: collection
     path: content/galeria
     format: yaml
@@ -108,20 +108,20 @@ content:
       primary: pie
     fields:
       - name: imagen
-        label: Foto
+        label: Foto / Photo
         type: image
         required: true
         options:
           media: images
       - name: pie
-        label: Pie de foto (español)
+        label: Pie de foto (español) / Caption (Spanish)
         type: string
       - name: caption
-        label: Caption (English)
+        label: Pie de foto (inglés) / Caption (English)
         type: string
 
   - name: testimonios
-    label: Testimonios
+    label: Testimonios / Testimonials
     type: collection
     path: content/testimonios
     format: yaml
@@ -133,35 +133,35 @@ content:
       primary: cita
     fields:
       - name: cita
-        label: Cita (español)
+        label: Cita (español) / Quote (Spanish)
         type: text
         required: true
       - name: quote
-        label: Quote (English)
+        label: Cita (inglés) / Quote (English)
         type: text
       - name: autora
-        label: Quién lo dice (español)
+        label: Quién lo dice (español) / Who said it (Spanish)
         type: string
         default: Una participante
       - name: author
-        label: Who said it (English)
+        label: Quién lo dice (inglés) / Who said it (English)
         type: string
         default: A participant
 
   - name: informe
-    label: Informe (flipbook)
+    label: Informe / Report (flipbook)
     type: file
     path: content/informe.yml
     format: yaml
     fields:
       - name: pdf_es
-        label: Informe en español (PDF)
+        label: Informe en español / Report in Spanish (PDF)
         type: file
         options:
           media: docs
           extensions: [pdf]
       - name: pdf_en
-        label: Report in English (PDF)
+        label: Informe en inglés / Report in English (PDF)
         type: file
         options:
           media: docs
