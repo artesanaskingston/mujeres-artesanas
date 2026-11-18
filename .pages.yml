@@ -59,7 +59,7 @@ content:
       rename: false
     filename:
       template: "{year}-{month}-{day}-{hour}{minute}{second}.yml"
-      field: create
+      field: false
     view:
       fields: [titulo, fecha]
       primary: titulo
@@ -78,6 +78,7 @@ content:
       - name: fecha
         label: Date and time / Fecha y hora (empty = «to be announced» / vacío = «por anunciar»)
         type: date
+        default: ""
         options:
           time: true
           format: "yyyy-MM-dd'T'HH:mm"
@@ -114,7 +115,7 @@ content:
       rename: false
     filename:
       template: "{year}-{month}-{day}-{hour}{minute}{second}.yml"
-      field: create
+      field: false
     view:
       fields: [imagen, pie]
       primary: pie
@@ -141,7 +142,7 @@ content:
       rename: false
     filename:
       template: "{year}-{month}-{day}-{hour}{minute}{second}.yml"
-      field: create
+      field: false
     view:
       fields: [cita, autora]
       primary: cita
@@ -171,7 +172,7 @@ content:
       rename: false
     filename:
       template: "{year}-{month}-{day}-{hour}{minute}{second}.yml"
-      field: create
+      field: false
     view:
       fields: [titulo, activo]
       primary: titulo
