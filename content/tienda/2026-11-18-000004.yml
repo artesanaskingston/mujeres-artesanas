@@ -1,0 +1,9 @@
+nombre: "Canasta tejida"
+name: "Woven basket"
+descripcion: "Canasta pequeña tejida a mano, perfecta para guardar hilos o frutas."
+description: "Small hand-woven basket, perfect for yarn or fruit."
+precio: 25
+imagen: /media/images/tienda-canasta.jpg
+artista: ""
+enlace: ""
+agotado: false

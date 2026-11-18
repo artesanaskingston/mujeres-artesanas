@@ -38,6 +38,9 @@ export default function (eleventyConfig) {
   });
   // Newest first (Pages CMS names new entries by creation time)
   eleventyConfig.addGlobalData("galeria", () => readCollection("content/galeria").filter((g) => g.imagen).reverse());
+  // Shop: newest first, like the gallery
+  eleventyConfig.addGlobalData("tienda", () => readCollection("content/tienda").filter((t) => t.nombre || t.name).reverse());
+  eleventyConfig.addFilter("precio", (v) => { const n = Number(v); return isNaN(n) || v === "" || v == null ? "" : "$" + (Number.isInteger(n) ? n : n.toFixed(2)); });
   eleventyConfig.addGlobalData("testimonios", () => readCollection("content/testimonios").filter((t) => t.cita || t.quote).reverse());
   // Events: dated ones in date order, undated ("to be announced") last
   eleventyConfig.addGlobalData("talleres", () =>

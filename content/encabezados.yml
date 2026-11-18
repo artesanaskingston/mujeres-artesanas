@@ -13,3 +13,6 @@ galeria:
 apoyo:
   imagen: ""
   posicion: center
+tienda:
+  imagen: /media/images/tienda-cabecera.jpg
+  posicion: center

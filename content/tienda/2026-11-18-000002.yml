@@ -1,0 +1,9 @@
+nombre: "Cuenco amarillo"
+name: "Yellow bowl"
+descripcion: "Cuenco de cerámica esmaltado en amarillo miel."
+description: "Ceramic bowl in a honey-yellow glaze."
+precio: 22
+imagen: /media/images/tienda-cuenco.jpg
+artista: ""
+enlace: ""
+agotado: true
