@@ -84,10 +84,16 @@ export default function (eleventyConfig) {
       ).join("");
     }
     let html = sanitizeHtml(text, {
-      allowedTags: ["p", "br", "strong", "b", "em", "i", "u", "s", "a", "ul", "ol", "li", "h3", "h4", "blockquote"],
-      allowedAttributes: { a: ["href", "target", "rel"] },
+      allowedTags: ["p", "br", "strong", "b", "em", "i", "u", "s", "a", "ul", "ol", "li", "h4", "blockquote",
+        "table", "thead", "tbody", "tr", "th", "td"],
+      allowedAttributes: { a: ["href", "target", "rel"], th: ["colspan", "rowspan"], td: ["colspan", "rowspan"] },
       allowedSchemes: ["http", "https", "mailto"],
+      // The editor's "/" menu offers Heading 1-3, Table, Quote, Code block:
+      // all headings become one subheading size; a code block becomes a normal paragraph.
       transformTags: {
+        h1: "h4", h2: "h4", h3: "h4", h5: "h4", h6: "h4",
+        pre: "p",
+        code: (tag, attribs) => ({ tagName: "span", attribs: {} }),
         a: (tag, attribs) => ({ tagName: "a", attribs: /^mailto:/i.test(attribs.href || "") ? attribs : { ...attribs, target: "_blank", rel: "noopener" } }),
       },
     });
