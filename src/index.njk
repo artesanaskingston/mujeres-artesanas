@@ -268,6 +268,7 @@ footer a{color:#fff}
 .foot-nav a{text-decoration:none;opacity:.9}
 @media (max-width:700px){footer .fine{flex-basis:100%}footer .wrap{gap:16px}footer img{width:56px;height:56px}footer .wrap>div:nth-child(2){min-width:0 !important}footer .name{font-size:1.25rem}}
 .foot-nav a:hover{opacity:1;text-decoration:underline}
+.foot-nav a.on{opacity:1;border-color:#fff}
 .fine{opacity:.75;font-size:.8rem}
 .deco{position:absolute;pointer-events:none}
 .rel{position:relative}
@@ -654,11 +655,11 @@ footer a{color:#fff}
 
 <footer>
   <nav class="foot-nav" aria-label="Menú / Menu">
-    <a href="#inicio"><span class="es">Inicio</span><span class="en">Home</span></a>
-    <a href="#quienes-somos"><span class="es">Quiénes somos</span><span class="en">About</span></a>
-    <a href="#talleres"><span class="es">Talleres y eventos</span><span class="en">Workshops &amp; events</span></a>
-    <a href="#galeria"><span class="es">Galería</span><span class="en">Gallery</span></a>
-    <a href="#apoyo"><span class="es">Apoyo y contacto</span><span class="en">Support &amp; contact</span></a>
+    <a href="#inicio" data-view="inicio"><span class="es">Inicio</span><span class="en">Home</span></a>
+    <a href="#quienes-somos" data-view="quienes-somos"><span class="es">Quiénes somos</span><span class="en">About</span></a>
+    <a href="#talleres" data-view="talleres"><span class="es">Talleres y eventos</span><span class="en">Workshops &amp; events</span></a>
+    <a href="#galeria" data-view="galeria"><span class="es">Galería</span><span class="en">Gallery</span></a>
+    <a href="#apoyo" data-view="apoyo"><span class="es">Apoyo y contacto</span><span class="en">Support &amp; contact</span></a>
   </nav>
   <div class="wrap">
     <img src="img/logo.png" alt="">
