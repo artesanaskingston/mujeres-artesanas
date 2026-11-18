@@ -218,7 +218,7 @@ a.em{overflow-wrap:anywhere}
 .ev-desc table,.fb-intro table{display:block;overflow-x:auto}
 .ev-img img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:3px;display:block}
 .ev h3{margin:6px 0 4px}
-.ev-head{display:flex;gap:16px;align-items:flex-start;margin-bottom:12px}
+.ev-head{display:flex;gap:16px;align-items:center;margin-bottom:12px}
 .ev-head h3{margin:2px 0 4px}
 .cal{flex:0 0 auto;width:82px;background:#fff;border:1px solid var(--cream2);border-radius:8px;overflow:hidden;text-align:center;line-height:1}
 .cal-m{background:var(--orange);color:#fff;font:700 .68rem/1 var(--sans);letter-spacing:.1em;padding:6px 2px 5px;text-transform:uppercase}
@@ -262,6 +262,10 @@ footer .wrap{display:flex;gap:26px;align-items:center;flex-wrap:wrap}
 footer img{width:72px;height:72px;background:var(--cream);border-radius:50%;padding:3px}
 footer .name{font:500 1.5rem/1.1 var(--serif)}
 footer a{color:#fff}
+.foot-nav{max-width:1120px;margin:0 auto 30px;padding:0 28px 26px;display:flex;flex-wrap:wrap;gap:10px 28px;border-bottom:1px solid rgba(255,255,255,.2);font:500 .85rem var(--sans);letter-spacing:.04em}
+.foot-nav a{text-decoration:none;opacity:.9}
+@media (max-width:700px){footer .fine{text-align:left !important}}
+.foot-nav a:hover{opacity:1;text-decoration:underline}
 .fine{opacity:.75;font-size:.8rem}
 .deco{position:absolute;pointer-events:none}
 .rel{position:relative}
@@ -647,6 +651,13 @@ footer a{color:#fff}
 </div>
 
 <footer>
+  <nav class="foot-nav" aria-label="Menú / Menu">
+    <a href="#inicio"><span class="es">Inicio</span><span class="en">Home</span></a>
+    <a href="#quienes-somos"><span class="es">Quiénes somos</span><span class="en">About</span></a>
+    <a href="#talleres"><span class="es">Talleres y eventos</span><span class="en">Workshops &amp; events</span></a>
+    <a href="#galeria"><span class="es">Galería</span><span class="en">Gallery</span></a>
+    <a href="#apoyo"><span class="es">Apoyo y contacto</span><span class="en">Support &amp; contact</span></a>
+  </nav>
   <div class="wrap">
     <img src="img/logo.png" alt="">
     <div style="flex:1;min-width:240px">
