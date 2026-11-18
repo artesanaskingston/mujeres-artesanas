@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<meta name="darkreader-lock">
 <title>Mujeres Artesanas de Kingston</title>
 <meta name="description" content="Mujeres Artesanas de Kingston: arte, tradición y comunidad para mujeres inmigrantes hispanohablantes en Kingston, NY.">
 <link rel="icon" href="img/logo.png">
@@ -12,6 +14,7 @@
 <style>
 {% raw %}
 :root{
+  color-scheme:only light;
   --cream:#F4EEE3; --cream2:#EAE1D1; --paper:#FFFDF8; --ink:#2A3340; --soft:#5A6270;
   --green:#36A176; --dkgreen:#295740; --teal:#97D2CA; --yellow:#F7BC38;
   --blue:#0066A8; --magenta:#A61E56; --orange:#F05F3E;
@@ -211,10 +214,23 @@ body.fb-closed .stf__outerShadow,body.fb-closed .stf__hardShadow,body.fb-closed 
 .ev>*{min-width:0}
 .ev,.next{overflow-wrap:anywhere}
 a.em{overflow-wrap:anywhere}
+.em-at::before{content:"@"}
 .ev-desc table,.fb-intro table{display:block;overflow-x:auto}
 .ev-img img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:3px;display:block}
 .ev h3{margin:6px 0 4px}
-.ev .date{font:700 .78rem var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
+.ev-head{display:flex;gap:16px;align-items:flex-start;margin-bottom:12px}
+.ev-head h3{margin:2px 0 4px}
+.cal{flex:0 0 auto;width:82px;background:#fff;border:1px solid var(--cream2);border-radius:8px;overflow:hidden;text-align:center;line-height:1}
+.cal-m{background:var(--orange);color:#fff;font:700 .68rem/1 var(--sans);letter-spacing:.1em;padding:6px 2px 5px;text-transform:uppercase}
+.cal-d{font:500 2.5rem/1 var(--serif);padding:6px 0 2px;color:var(--ink)}
+.cal-w{font:500 .66rem/1.2 var(--sans);color:var(--soft);padding:0 4px 7px}
+.cal-t{border-top:1px solid var(--cream2);margin:0 8px;padding:5px 0 6px;font:600 .74rem/1 var(--sans);color:var(--dkgreen)}
+.cal.tba .cal-m{font-size:.56rem;letter-spacing:.06em}
+.cal.tba .cal-d{color:var(--soft);padding-bottom:8px}
+.ev.past .cal-m{background:var(--soft)}
+.ev.past .cal-d{color:var(--soft)}
+#home-next .ev-head{margin-bottom:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .ev-place{font-weight:500;margin:0 0 8px}
 .ev p:last-child,.ev-desc>:last-child{margin-bottom:0}
 .ev-desc ul,.ev-desc ol{margin:0 0 1em;padding-left:1.3em}
@@ -225,7 +241,7 @@ a.em{overflow-wrap:anywhere}
 .ev-desc td p,.ev-desc th p,.fb-intro td p,.fb-intro th p{margin:0}
 .ev-desc blockquote{margin:0 0 1em;padding-left:14px;border-left:3px solid var(--cream2);font-style:italic}
 .ev.past{border-left-color:var(--cream2)}
-.ev.past .date{color:var(--soft)}
+
 @media (max-width:760px){.ev{grid-template-columns:minmax(0,1fr);padding:18px}.events-wrap{padding-left:5px;padding-right:5px}.events-wrap>.kicker,.events-wrap>.ev-none{padding-left:23px}}
 /* testimonials */
 #testimonios{position:relative}
@@ -253,6 +269,16 @@ footer a{color:#fff}
 </style>
 </head>
 <body>
+{%- macro cal(t) -%}
+<div class="cal{% if not t.fecha %} tba{% endif %}" aria-hidden="true">
+  <div class="cal-m"><span class="es">{{ t.fecha | calMes("es") }}</span><span class="en">{{ t.fecha | calMes("en") }}</span></div>
+  <div class="cal-d">{{ t.fecha | calDia }}</div>
+  {%- if t.fecha %}<div class="cal-w"><span class="es">{{ t.fecha | calSemana("es") }}</span><span class="en">{{ t.fecha | calSemana("en") }}</span></div>{% endif %}
+  {%- set h_es = t.fecha | calHora("es") %}{% set h_en = t.fecha | calHora("en") %}
+  {%- if h_es %}<div class="cal-t"><span class="es">{{ h_es }}</span><span class="en">{{ h_en }}</span></div>{% endif %}
+</div>
+<span class="sr"><span class="es">{{ t.fecha | fecha("es") }}</span><span class="en">{{ t.fecha | fecha("en") }}</span></span>
+{%- endmacro -%}
 
 <div style="background:var(--ink);color:var(--cream);text-align:center;font:500 .72rem var(--sans);letter-spacing:.14em;text-transform:uppercase;padding:6px 10px"><span class="es">Borrador · vista previa</span><span class="en">Draft · preview</span></div>
 <header>
@@ -348,12 +374,12 @@ footer a{color:#fff}
         <div class="next" id="home-next">
           {%- set t = talleres[0] %}
           {%- if t %}
-          <div class="date"><span class="es">{{ t.fecha | fecha("es") }}</span><span class="en">{{ t.fecha | fecha("en") }}</span></div>
-          <h3 class="es" style="margin-top:8px">{{ t.titulo }}</h3><h3 class="en" style="margin-top:8px">{{ t.title or t.titulo }}</h3>
-          <p style="margin:0">{{ t.lugar }}</p>
+          <div class="ev-head">
+            {{ cal(t) }}
+            <div><h3 class="es">{{ t.titulo }}</h3><h3 class="en">{{ t.title or t.titulo }}</h3><p class="ev-place">{{ t.lugar }}</p></div>
+          </div>
           {%- else %}
-          <div class="date"><span class="es">Fecha por anunciar</span><span class="en">Date to be announced</span></div>
-          <p class="es" style="margin:8px 0 0">Escríbenos para más información.</p><p class="en" style="margin:8px 0 0">Write to us for details.</p>
+          <p class="es" style="margin:0">Pronto anunciaremos el próximo encuentro.</p><p class="en" style="margin:0">The next gathering will be announced soon.</p>
           {%- endif %}
           <p style="margin:12px 0 0"><a href="#talleres"><span class="es">Ver todos los talleres</span><span class="en">See all workshops</span></a></p>
         </div>
@@ -468,16 +494,20 @@ footer a{color:#fff}
         <article class="ev{% if not t.imagen %} noimg{% endif %}" data-fecha="{{ t.fecha | iso }}">
           {%- if t.imagen %}<div class="ev-img">{% foto t.imagen, t.titulo, "", "(max-width: 760px) 100vw, 220px" %}</div>{% endif %}
           <div>
-            <div class="date"><span class="es">{{ t.fecha | fecha("es") }}</span><span class="en">{{ t.fecha | fecha("en") }}</span></div>
-            <h3 class="es">{{ t.titulo }}</h3><h3 class="en">{{ t.title or t.titulo }}</h3>
-            {%- if t.lugar %}<p class="ev-place">{{ t.lugar }}</p>{% endif %}
+            <div class="ev-head">
+              {{ cal(t) }}
+              <div>
+                <h3 class="es">{{ t.titulo }}</h3><h3 class="en">{{ t.title or t.titulo }}</h3>
+                {%- if t.lugar %}<p class="ev-place">{{ t.lugar }}</p>{% endif %}
+              </div>
+            </div>
             {%- if t.texto %}<div class="es ev-desc">{{ t.texto | richtext | safe }}</div>{% endif %}
             {%- if t.text or t.texto %}<div class="en ev-desc">{{ (t.text or t.texto) | richtext | safe }}</div>{% endif %}
           </div>
         </article>
         {%- endfor %}
       </div>
-      <p class="ev-none" hidden><span class="es">Pronto anunciaremos el próximo taller. Escríbenos a {{ site.email | emails | safe }}.</span><span class="en">The next workshop will be announced soon. Email {{ site.email | emails | safe }}.</span></p>
+      <p class="ev-none" hidden><span class="es">Pronto anunciaremos el próximo taller. {{ site.email | emailLink("Escríbenos") | safe }} para más información.</span><span class="en">The next workshop will be announced soon. {{ site.email | emailLink("Email us") | safe }} for details.</span></p>
       <div id="ev-past-wrap" hidden>
         <div class="kicker" style="margin-top:40px"><span class="es">Anteriores</span><span class="en">Past</span></div>
         <div class="events" id="ev-past"></div>
@@ -772,7 +802,7 @@ footer a{color:#fff}
         [].slice.call(body.children).forEach(function(c){var k=c.cloneNode(true);hn.appendChild(k);});
         hn.appendChild(link);
       }else{
-        hn.innerHTML='<div class="date"><span class="es">Fecha por anunciar</span><span class="en">Date to be announced</span></div><p class="es" style="margin:8px 0 0">Escríbenos para más información.</p><p class="en" style="margin:8px 0 0">Write to us for details.</p>';
+        hn.innerHTML='<p class="es" style="margin:0">Pronto anunciaremos el próximo encuentro.</p><p class="en" style="margin:0">The next gathering will be announced soon.</p>';
         hn.appendChild(link);
       }
     }
@@ -796,8 +826,12 @@ footer a{color:#fff}
   })();
 
   /* e-mail links: the address is stored reversed so bots can't read it */
-  [].slice.call(document.querySelectorAll("a.em")).forEach(function(a){
-    var r=function(x){return x.split("").reverse().join("")};var addr=r(a.dataset.u)+String.fromCharCode(64)+r(a.dataset.d);a.href="mailto:"+addr;a.textContent=addr;
+  /* the address is only put together at the moment someone clicks */
+  document.addEventListener("click",function(e){
+    var a=e.target.closest&&e.target.closest("a.em");if(!a)return;
+    e.preventDefault();
+    var r=function(x){return x.split("").reverse().join("")};
+    window.location.href="mailto:"+r(a.dataset.u)+String.fromCharCode(64)+r(a.dataset.d);
   });
 
   /* gallery slideshow */

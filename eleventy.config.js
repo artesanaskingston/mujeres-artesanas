@@ -52,36 +52,37 @@ export default function (eleventyConfig) {
   // Site-wide settings
   eleventyConfig.addGlobalData("site", { email: "mujeresartesanasdekingston@gmail.com" });
 
-  // E-mail protection: escape the text, then turn every address into a link with no
-  // readable address in the HTML (user and domain stored reversed, without the @).
-  // A small script on the page turns it back into a normal mailto: link.
+  // E-mail protection. The HTML never contains a readable address: user and domain are
+  // stored reversed, without the @. The visible text is either the link's own words
+  // ("Escríbenos") or the address with the @ drawn by CSS. A script builds the real
+  // mailto: link only when someone clicks it.
   const esc = (t) => String(t ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   const rev = (t) => t.split("").reverse().join("");
-  eleventyConfig.addFilter("emails", (text) =>
-    esc(text).replace(/([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\.[A-Za-z]{2,})/g, (m, user, domain) =>
-      `<a class="em" href="#" data-u="${rev(user)}" data-d="${rev(domain)}">${user} (arroba / at) ${domain.replace(/\./g, " · ")}</a>`
-    )
-  );
+  const EMAIL_RE = /([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\.[A-Za-z]{2,})/g;
+  const emLink = (user, domain, labelHtml) =>
+    `<a class="em" href="#" data-u="${rev(user)}" data-d="${rev(domain)}">` +
+    (labelHtml || `<span>${user}</span><span class="em-at" aria-label="@"></span><span>${domain}</span>`) + `</a>`;
+  eleventyConfig.addFilter("emails", (text) => esc(text).replace(EMAIL_RE, (m, u, d) => emLink(u, d)));
+  // A word that links to an address, e.g. {{ site.email | emailLink("Escríbenos") }}
+  eleventyConfig.addFilter("emailLink", (addr, label) => {
+    const m = String(addr).match(/^([^@]+)@(.+)$/);
+    return m ? emLink(m[1], m[2], esc(label)) : esc(label);
+  });
 
   // Plain text that keeps the editor's line breaks (no other formatting)
   eleventyConfig.addFilter("lineas", (value) =>
-    esc(String(value ?? "").trim())
-      .replace(/\n+/g, "<br>")
-      .replace(/([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\.[A-Za-z]{2,})/g, (m, u, d) =>
-        `<a class="em" href="#" data-u="${rev(u)}" data-d="${rev(d)}">${u} (arroba / at) ${d.replace(/\./g, " · ")}</a>`)
+    esc(String(value ?? "").trim()).replace(/\n+/g, "<br>").replace(EMAIL_RE, (m, u, d) => emLink(u, d))
   );
 
   // Formatted text from the rich-text editor: keep simple formatting only,
   // then protect e-mail addresses (in links and in plain text) the same way.
-  const emLink = (user, domain) =>
-    `<a class="em" href="#" data-u="${rev(user)}" data-d="${rev(domain)}">${user} (arroba / at) ${domain.replace(/\./g, " · ")}</a>`;
   eleventyConfig.addFilter("richtext", (value) => {
     const text = String(value ?? "").trim();
     if (!text) return "";
     if (!/<[a-z]/i.test(text)) {
       // plain text: paragraphs from blank lines, line breaks kept
       return text.split(/\n\s*\n/).map((para) =>
-        `<p>${esc(para).replace(/\n/g, "<br>").replace(/([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\.[A-Za-z]{2,})/g, (m, u, d) => emLink(u, d))}</p>`
+        `<p>${esc(para).replace(/\n/g, "<br>").replace(EMAIL_RE, (m, u, d) => emLink(u, d))}</p>`
       ).join("");
     }
     let html = sanitizeHtml(text, {
@@ -98,11 +99,16 @@ export default function (eleventyConfig) {
         a: (tag, attribs) => ({ tagName: "a", attribs: /^mailto:/i.test(attribs.href || "") ? attribs : { ...attribs, target: "_blank", rel: "noopener" } }),
       },
     });
-    // mailto links -> protected links
-    html = html.replace(/<a href="mailto:([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\.[A-Za-z]{2,})[^"]*"[^>]*>[\s\S]*?<\/a>/gi, (m, u, d) => emLink(u, d));
+    // mailto links -> protected links that keep their own words
+    // (unless the words are the address itself, which is then shown with a CSS "@")
+    html = html.replace(/<a href="mailto:([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\.[A-Za-z]{2,})[^"]*"[^>]*>([\s\S]*?)<\/a>/gi, (m, u, d, inner) => {
+      const words = inner.replace(/<[^>]+>/g, "").trim();
+      const isAddress = !words || /@/.test(words);
+      return emLink(u, d, isAddress ? "" : inner);
+    });
     // plain addresses in the text (not inside tags)
     html = html.split(/(<[^>]+>)/).map((part) =>
-      part.startsWith("<") ? part : part.replace(/([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\.[A-Za-z]{2,})/g, (m, u, d) => emLink(u, d))
+      part.startsWith("<") ? part : part.replace(EMAIL_RE, (m, u, d) => emLink(u, d))
     ).join("");
     return html;
   });
@@ -119,6 +125,21 @@ export default function (eleventyConfig) {
     const time = hasTime ? d.toLocaleTimeString(locale, { hour: "numeric", minute: "2-digit" }) : "";
     return hasTime ? `${day}, ${time}` : day;
   });
+  // Calendar tile pieces
+  const asDate = (v) => { const s = String(v || ""); if (!s) return null; const d = new Date(s.length <= 10 ? s + "T12:00" : s); return isNaN(d) ? null : d; };
+  const hasTime = (v) => String(v || "").length > 10;
+  eleventyConfig.addFilter("calMes", (v, lang) => {
+    const d = asDate(v); if (!d) return lang === "en" ? "TBA" : "Por anunciar";
+    const m = d.toLocaleDateString(lang === "en" ? "en-US" : "es-US", { month: "short" }).replace(".", "").toUpperCase();
+    return `${m} '${String(d.getFullYear()).slice(2)}`;
+  });
+  eleventyConfig.addFilter("calDia", (v) => { const d = asDate(v); return d ? d.getDate() : "?"; });
+  eleventyConfig.addFilter("calSemana", (v, lang) => { const d = asDate(v); return d ? d.toLocaleDateString(lang === "en" ? "en-US" : "es-US", { weekday: "long" }) : ""; });
+  eleventyConfig.addFilter("calHora", (v, lang) => {
+    const d = asDate(v); if (!d || !hasTime(v)) return "";
+    return lang === "en" ? d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }) : d.toLocaleTimeString("es-US", { hour: "2-digit", minute: "2-digit", hour12: false });
+  });
+
   eleventyConfig.addFilter("iso", (value) => (value ? String(value) : ""));
 
   // Resize uploaded photos (phone photos can be huge) into web-friendly sizes.

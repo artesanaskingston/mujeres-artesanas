@@ -2,6 +2,6 @@ titulo: Taller mensual de arte
 title: Monthly art workshop
 fecha: ""
 lugar: 231 Clinton Ave., Kingston
-texto: "Escríbenos a mujeresartesanasdekingston@gmail.com para participar."
-text: "Email mujeresartesanasdekingston@gmail.com to join."
+texto: '<p><a href="mailto:mujeresartesanasdekingston@gmail.com">Escríbenos</a> para participar.</p>'
+text: '<p><a href="mailto:mujeresartesanasdekingston@gmail.com">Email us</a> to join.</p>'
 imagen: ""
