@@ -139,6 +139,12 @@ ul.dots li:before{content:"";position:absolute;left:0;top:.62em;width:10px;heigh
 
 .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
 .chip{background:var(--paper);border-radius:20px;padding:8px 16px;font-size:.9rem;font-weight:500}
+.logos{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.logos li{background:#fff;border-radius:14px;padding:14px 20px;height:120px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.logos img{display:block;max-height:88px;max-width:100%;width:auto;height:auto}
+.logos .logo-fs img{max-height:70px}
+.logos .logo-fs span{font-size:.72rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--soft)}
+@media (max-width:640px){.logos{grid-template-columns:1fr 1fr;gap:10px}.logos .logo-fs{grid-column:1/-1}.logos li{height:96px;padding:10px 14px}.logos img{max-height:68px}.logos .logo-fs img{max-height:52px}}
 .chip i{font-style:normal;color:var(--soft);font-weight:300}
 
 /* gallery: trapezium slices, 50/50 pairs, morph to full picture on hover */
@@ -225,7 +231,7 @@ body.fb-closed .stf__outerShadow,body.fb-closed .stf__hardShadow,body.fb-closed 
 /* events */
 .events{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
 .ev{display:grid;grid-template-columns:220px 1fr;gap:24px;background:var(--paper);border-left:6px solid var(--orange);border-radius:4px;padding:20px 24px;align-items:start}
-.ev.noimg{grid-template-columns:minmax(0,1fr)}
+.ev-ph{aspect-ratio:4/3;border-radius:3px;background:var(--cream2)}
 .ev>*{min-width:0}
 .ev,.next{overflow-wrap:anywhere}
 a.em{overflow-wrap:anywhere}
@@ -259,7 +265,7 @@ footer a.em{overflow-wrap:normal}
 .ev-desc blockquote{margin:0 0 1em;padding-left:14px;border-left:3px solid var(--cream2);font-style:italic}
 .ev.past{border-left-color:var(--cream2)}
 
-@media (max-width:760px){.ev{grid-template-columns:minmax(0,1fr);padding:18px}.events-wrap{padding-left:5px;padding-right:5px}.events-wrap>.kicker,.events-wrap>.ev-none{padding-left:23px}}
+@media (max-width:760px){.ev{grid-template-columns:minmax(0,1fr);padding:18px}.ev-ph{display:none}.events-wrap{padding-left:5px;padding-right:5px}.events-wrap>.kicker,.events-wrap>.ev-none{padding-left:23px}}
 /* testimonials */
 #testimonios{position:relative}
 .tq{margin:0;display:none}
@@ -516,13 +522,13 @@ footer a{color:#fff}
   <section>
     <div class="wrap">
       <div class="kicker"><span class="es">Con el apoyo de</span><span class="en">With support from</span></div>
-      <div class="chips">
-        <span class="chip">Neighborhood Print Studio</span>
-        <span class="chip">Kingston Ceramics Studio</span>
-        <span class="chip">Radio Kingston</span>
-        <span class="chip">Kingston Common Futures</span>
-        <span class="chip">Circle Creative Collective <i class="es">· patrocinador fiscal</i><i class="en">· fiscal sponsor</i></span>
-      </div>
+      <ul class="logos">
+        <li><img src="img/logos/neighborhood-print-studio.webp" alt="Neighborhood Print Studio" width="480" height="213" loading="lazy"></li>
+        <li><img src="img/logos/kingston-ceramics-studio.webp" alt="Kingston Ceramics Studio" width="381" height="480" loading="lazy"></li>
+        <li><img src="img/logos/radio-kingston.webp" alt="Radio Kingston" width="480" height="245" loading="lazy"></li>
+        <li><img src="img/logos/kingston-common-futures.webp" alt="Kingston Common Futures" width="296" height="296" loading="lazy"></li>
+        <li class="logo-fs"><img src="img/logos/circle-creative-collective.webp" alt="Circle Creative Collective" width="477" height="480" loading="lazy"><span class="es">Patrocinador fiscal</span><span class="en">Fiscal sponsor</span></li>
+      </ul>
     </div>
   </section>
 </div>
@@ -544,8 +550,8 @@ footer a{color:#fff}
       <div class="kicker"><span class="es">Próximos</span><span class="en">Coming up</span></div>
       <div class="events" id="ev-up">
         {%- for t in talleres %}
-        <article class="ev{% if not t.imagen %} noimg{% endif %}" data-fecha="{{ t.fecha | iso }}">
-          {%- if t.imagen %}<div class="ev-img">{% foto t.imagen, t.titulo, "", "(max-width: 760px) 100vw, 220px" %}</div>{% endif %}
+        <article class="ev" data-fecha="{{ t.fecha | iso }}">
+          {%- if t.imagen %}<div class="ev-img">{% foto t.imagen, t.titulo, "", "(max-width: 760px) 100vw, 220px" %}</div>{% else %}<div class="ev-img ev-ph" aria-hidden="true"></div>{% endif %}
           <div>
             <div class="ev-head">
               {{ cal(t) }}
