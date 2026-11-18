@@ -140,11 +140,13 @@ ul.dots li:before{content:"";position:absolute;left:0;top:.62em;width:10px;heigh
 .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
 .chip{background:var(--paper);border-radius:20px;padding:8px 16px;font-size:.9rem;font-weight:500}
 .logos{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
-.logos li{background:#fff;border-radius:14px;padding:14px 20px;height:120px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.logos li{display:flex}
+.logos a{flex:1;background:#fff;border-radius:14px;padding:14px 20px;height:120px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;transition:box-shadow .2s ease,transform .2s ease}
+.logos a:hover,.logos a:focus-visible{box-shadow:0 4px 14px rgba(42,51,64,.12);transform:translateY(-2px)}
 .logos img{display:block;max-height:88px;max-width:100%;width:auto;height:auto}
 .logos .logo-fs img{max-height:70px}
 .logos .logo-fs span{font-size:.72rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--soft)}
-@media (max-width:640px){.logos{grid-template-columns:1fr 1fr;gap:10px}.logos .logo-fs{grid-column:1/-1}.logos li{height:96px;padding:10px 14px}.logos img{max-height:68px}.logos .logo-fs img{max-height:52px}}
+@media (max-width:640px){.logos{grid-template-columns:1fr 1fr;gap:10px}.logos .logo-fs{grid-column:1/-1}.logos a{height:96px;padding:10px 14px}.logos img{max-height:68px}.logos .logo-fs img{max-height:52px}}
 .chip i{font-style:normal;color:var(--soft);font-weight:300}
 
 /* gallery: trapezium slices, 50/50 pairs, morph to full picture on hover */
@@ -534,11 +536,11 @@ footer a{color:#fff}
     <div class="wrap">
       <div class="kicker"><span class="es">Con el apoyo de</span><span class="en">With support from</span></div>
       <ul class="logos">
-        <li><img src="img/logos/neighborhood-print-studio.webp" alt="Neighborhood Print Studio" width="480" height="213" loading="lazy"></li>
-        <li><img src="img/logos/kingston-ceramics-studio.webp" alt="Kingston Ceramics Studio" width="381" height="480" loading="lazy"></li>
-        <li><img src="img/logos/radio-kingston.webp" alt="Radio Kingston" width="600" height="282" loading="lazy"></li>
-        <li><img src="img/logos/kingston-common-futures.webp" alt="Kingston Common Futures" width="296" height="296" loading="lazy"></li>
-        <li class="logo-fs"><img src="img/logos/circle-creative-collective.webp" alt="Circle Creative Collective" width="477" height="480" loading="lazy"><span class="es">Patrocinador fiscal</span><span class="en">Fiscal sponsor</span></li>
+        <li><a href="https://www.drawkingston.org/studio" target="_blank" rel="noopener"><img src="img/logos/neighborhood-print-studio.webp" alt="Neighborhood Print Studio" width="480" height="213" loading="lazy"></a></li>
+        <li><a href="https://www.kingstonceramicsstudio.com/" target="_blank" rel="noopener"><img src="img/logos/kingston-ceramics-studio.webp" alt="Kingston Ceramics Studio" width="381" height="480" loading="lazy"></a></li>
+        <li><a href="https://radiokingston.org/" target="_blank" rel="noopener"><img src="img/logos/radio-kingston.webp" alt="Radio Kingston" width="600" height="282" loading="lazy"></a></li>
+        <li><a href="https://kingstoncommonfutures.org/" target="_blank" rel="noopener"><img src="img/logos/kingston-common-futures.webp" alt="Kingston Common Futures" width="296" height="296" loading="lazy"></a></li>
+        <li class="logo-fs"><a href="https://www.circlecreativecollective.org/" target="_blank" rel="noopener"><img src="img/logos/circle-creative-collective.webp" alt="Circle Creative Collective" width="477" height="480" loading="lazy"><span class="es">Patrocinador fiscal</span><span class="en">Fiscal sponsor</span></a></li>
       </ul>
     </div>
   </section>
