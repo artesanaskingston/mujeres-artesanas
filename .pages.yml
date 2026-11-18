@@ -148,20 +148,46 @@ content:
         type: string
         default: A participant
 
-  - name: informe
-    label: Informe / Report (flipbook)
-    type: file
-    path: content/informe.yml
+  - name: informes
+    label: Informes / Reports (flipbook)
+    type: collection
+    path: content/informes
     format: yaml
+    filename:
+      template: "{year}-{month}-{day}-{hour}{minute}{second}-{primary}.yml"
+      field: create
+    view:
+      fields: [titulo, activo]
+      primary: titulo
     fields:
+      - name: activo
+        label: Activo (se muestra en el sitio) / Active (shown on the site)
+        type: boolean
+        description: "El sitio muestra un solo informe a la vez. Si marcas varios como activos, se muestra el más reciente; si no hay ninguno activo, el flipbook no aparece. / The site shows one report at a time. If several are marked active, the newest one is shown; if none is active, the flipbook is hidden."
+        default: false
+      - name: titulo
+        label: Título (español) / Title (Spanish)
+        type: string
+        required: true
+      - name: title
+        label: Título (inglés) / Title (English)
+        type: string
+      - name: intro
+        label: Introducción (español) / Introduction (Spanish)
+        type: text
+      - name: intro_en
+        label: Introducción (inglés) / Introduction (English)
+        type: text
       - name: pdf_es
         label: Informe en español / Report in Spanish (PDF)
+        description: "Si subes solo uno de los dos, se usa para ambos idiomas. / If you upload only one of the two, it is used for both languages."
         type: file
         options:
           media: docs
           extensions: [pdf]
       - name: pdf_en
         label: Informe en inglés / Report in English (PDF)
+        description: "Si subes solo uno de los dos, se usa para ambos idiomas. / If you upload only one of the two, it is used for both languages."
         type: file
         options:
           media: docs

@@ -393,12 +393,12 @@ footer a{color:#fff}
     </div>
   </section>
 
-  <section class="paper">
+  <section class="paper"{% if not (informe.pdf_es or informe.pdf_en) %} hidden{% endif %}>
     <div class="wrap">
-      <div class="kicker"><span class="es">Informe de impacto 2025</span><span class="en">2025 impact report</span></div>
+      <div class="kicker"><span class="es">{{ informe.titulo }}</span><span class="en">{{ informe.title or informe.titulo }}</span></div>
       <h2 class="es">Hojea nuestro informe</h2><h2 class="en">Flip through our report</h2>
-      <p class="es" style="max-width:680px">Preparado con Kingston Common Futures, que financió nuestro trabajo en 2025. Haz clic en una esquina o arrastra para pasar la página.</p>
-      <p class="en" style="max-width:680px">Prepared with Kingston Common Futures, which funded our work in 2025. Click a corner or drag to turn the page.</p>
+      <p class="es" style="max-width:680px">{% if informe.intro %}{{ informe.intro }} {% endif %}Haz clic en una esquina o arrastra para pasar la página.</p>
+      <p class="en" style="max-width:680px">{% if informe.intro_en or informe.intro %}{{ informe.intro_en or informe.intro }} {% endif %}Click a corner or drag to turn the page.</p>
       <div class="fb-wrap" style="margin-top:26px">
         <div class="fb-stage" id="fb-stage" data-pdf-es="{{ informe.pdf_es }}" data-pdf-en="{{ informe.pdf_en }}"><p class="fb-hint" id="fb-loading">…</p></div>
         <div class="fb-ctrl">

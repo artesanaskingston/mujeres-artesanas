@@ -28,7 +28,12 @@ export default function (eleventyConfig) {
 
   // Editable content
   eleventyConfig.addGlobalData("inicio", () => readFile("content/inicio.yml"));
-  eleventyConfig.addGlobalData("informe", () => readFile("content/informe.yml"));
+  // Reports for the flipbook: show the active one. If several are marked active,
+  // the newest wins; if none is, the flipbook section is hidden.
+  eleventyConfig.addGlobalData("informe", () => {
+    const activos = readCollection("content/informes").filter((r) => r.activo && (r.pdf_es || r.pdf_en));
+    return activos.length ? activos[activos.length - 1] : {};
+  });
   // Newest first (Pages CMS names new entries by creation time)
   eleventyConfig.addGlobalData("galeria", () => readCollection("content/galeria").filter((g) => g.imagen).reverse());
   eleventyConfig.addGlobalData("testimonios", () => readCollection("content/testimonios").filter((t) => t.cita || t.quote).reverse());
