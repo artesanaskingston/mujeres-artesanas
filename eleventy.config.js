@@ -118,7 +118,9 @@ export default function (eleventyConfig) {
       urlPath: "/img/opt/",
     });
     const full = meta.jpeg[meta.jpeg.length - 1].url;
-    const html = Image.generateHTML(meta, { alt, sizes, loading: "lazy", decoding: "async", class: cls || undefined });
+    const attrs = { alt, sizes, loading: "lazy", decoding: "async" };
+    if (cls) attrs.class = cls;
+    const html = Image.generateHTML(meta, attrs);
     return html.replace("<img ", `<img data-full="${full}" `);
   });
 
