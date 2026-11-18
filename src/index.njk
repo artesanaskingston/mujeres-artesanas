@@ -226,7 +226,7 @@ a.em{overflow-wrap:anywhere}
 .ev-desc blockquote{margin:0 0 1em;padding-left:14px;border-left:3px solid var(--cream2);font-style:italic}
 .ev.past{border-left-color:var(--cream2)}
 .ev.past .date{color:var(--soft)}
-@media (max-width:760px){.ev{grid-template-columns:minmax(0,1fr);padding:18px}}
+@media (max-width:760px){.ev{grid-template-columns:minmax(0,1fr);padding:18px}.events-wrap{padding-left:5px;padding-right:5px}.events-wrap>.kicker,.events-wrap>.ev-none{padding-left:23px}}
 /* testimonials */
 #testimonios{position:relative}
 .tq{margin:0;display:none}
@@ -461,7 +461,7 @@ footer a{color:#fff}
   </div>
 
   <section style="padding-top:28px">
-    <div class="wrap">
+    <div class="wrap events-wrap">
       <div class="kicker"><span class="es">Próximos</span><span class="en">Coming up</span></div>
       <div class="events" id="ev-up">
         {%- for t in talleres %}
