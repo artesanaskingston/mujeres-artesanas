@@ -54,11 +54,24 @@ nav a.on{border-color:var(--navc,var(--green))}
 .btn.y{background:var(--yellow);color:var(--ink)}
 .btn.g{background:var(--green);color:#fff}
 .btn.o{background:transparent;border:1.5px solid currentColor;color:inherit}
+.menu-btn{display:none}
 @media (max-width:900px){
   .head{flex-wrap:wrap;padding:10px 18px}
-  nav{order:3;width:100%;overflow-x:auto;gap:18px;padding-bottom:4px}
-  .brand img{width:44px;height:44px}
+  .brand img{width:40px;height:40px}
+  .brand{gap:9px}
+  .brand span{font-size:1.08rem}
+  .tools{gap:8px}
   .tools .btn{display:none}
+  .menu-btn{all:unset;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;border-radius:8px;align-items:center}
+  .menu-btn span{display:block;width:22px;height:2px;background:var(--ink);border-radius:2px;transition:transform .25s ease,opacity .2s ease}
+  header.open .menu-btn span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  header.open .menu-btn span:nth-child(2){opacity:0}
+  header.open .menu-btn span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  header nav{order:3;width:100%;display:none;flex-direction:column;align-items:stretch;gap:0;padding:6px 0 8px;font-size:1rem}
+  header.open nav{display:flex}
+  header nav a{padding:12px 2px;border-bottom:1px solid var(--cream2)}
+  header nav a:last-child{border-bottom:0}
+  header nav a.on{border-bottom-color:var(--cream2);box-shadow:inset 4px 0 0 var(--navc,var(--green));padding-left:14px}
 }
 
 /* views */
@@ -266,6 +279,7 @@ footer .name{font:500 1.5rem/1.1 var(--serif)}
 footer a{color:#fff}
 .foot-nav{max-width:1120px;margin:0 auto 30px;padding:0 28px 26px;display:flex;flex-wrap:wrap;gap:10px 28px;border-bottom:1px solid rgba(255,255,255,.2);font:500 .85rem var(--sans);letter-spacing:.04em}
 .foot-nav a{text-decoration:none;opacity:.9}
+@media (max-width:900px){.foot-nav{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;white-space:normal;justify-items:start}}
 @media (max-width:700px){footer .fine{flex-basis:100%}footer .wrap{gap:16px}footer img{width:56px;height:56px}footer .wrap>div:nth-child(2){min-width:0 !important}footer .name{font-size:1.25rem}}
 .foot-nav a:hover{opacity:1;text-decoration:underline}
 .foot-nav a.on{opacity:1;border-color:#fff}
@@ -291,7 +305,7 @@ footer a{color:#fff}
 <header>
   <div class="head">
     <a class="brand" href="#inicio"><img src="img/logo.png" alt="Logo de Mujeres Artesanas de Kingston"><span>Mujeres Artesanas<br>de Kingston</span></a>
-    <nav>
+    <nav id="main-nav">
       <a href="#inicio" data-view="inicio"><span class="es">Inicio</span><span class="en">Home</span></a>
       <a href="#quienes-somos" data-view="quienes-somos"><span class="es">Quiénes somos</span><span class="en">About</span></a>
       <a href="#talleres" data-view="talleres"><span class="es">Talleres y eventos</span><span class="en">Workshops &amp; events</span></a>
@@ -304,6 +318,7 @@ footer a{color:#fff}
         <button type="button" data-lang="en" aria-pressed="false">EN</button>
       </div>
       <a class="btn y" href="#apoyo"><span class="es">Donar</span><span class="en">Donate</span></a>
+      <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="main-nav" aria-label="Menú / Menu"><span></span><span></span><span></span></button>
     </div>
   </div>
 </header>
@@ -781,6 +796,11 @@ footer a{color:#fff}
   var fbResize=null;
   window.addEventListener("resize",function(){if(!fbBig)return;clearTimeout(fbResize);fbResize=setTimeout(function(){mountFlip(flip?flip.getCurrentPageIndex():0)},200);});
 
+  var hdr=document.querySelector("header"),mb=document.getElementById("menu-btn");
+  function setMenu(open){hdr.classList.toggle("open",open);mb.setAttribute("aria-expanded",open?"true":"false");}
+  mb.addEventListener("click",function(){setMenu(!hdr.classList.contains("open"))});
+  window.addEventListener("hashchange",function(){setMenu(false)});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")setMenu(false)});
   window.addEventListener("hashchange",show); show();
 
   function setLang(l){
