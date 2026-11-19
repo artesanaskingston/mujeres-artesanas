@@ -65,7 +65,8 @@ export default function (eleventyConfig) {
   );
 
   // Site-wide settings
-  eleventyConfig.addGlobalData("site", { email: "mujeresartesanasdekingston@gmail.com" });
+  // tienda: shop page and menu items on/off (on hold until it is decided who receives the money)
+  eleventyConfig.addGlobalData("site", { email: "mujeresartesanasdekingston@gmail.com", tienda: false });
 
   // E-mail protection. The HTML never contains a readable address: user and domain are
   // stored reversed, without the @. The visible text is either the link's own words

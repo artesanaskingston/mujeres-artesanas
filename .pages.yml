@@ -137,26 +137,26 @@ content:
                   label: Center / Centro
                 - value: bottom
                   label: Bottom / Abajo
-      - name: tienda
-        label: Shop / Tienda
-        type: object
-        fields:
-          - name: imagen
-            label: Photo / Foto
-            type: image
-            options:
-              media: images
-          - name: posicion
-            label: Which part of the photo stays visible / Qué parte de la foto se ve
-            type: select
-            options:
-              values:
-                - value: top
-                  label: Top / Arriba
-                - value: center
-                  label: Center / Centro
-                - value: bottom
-                  label: Bottom / Abajo
+#      - name: tienda
+#        label: Shop / Tienda
+#        type: object
+#        fields:
+#          - name: imagen
+#            label: Photo / Foto
+#            type: image
+#            options:
+#              media: images
+#          - name: posicion
+#            label: Which part of the photo stays visible / Qué parte de la foto se ve
+#            type: select
+#            options:
+#              values:
+#                - value: top
+#                  label: Top / Arriba
+#                - value: center
+#                  label: Center / Centro
+#                - value: bottom
+#                  label: Bottom / Abajo
       - name: apoyo
         label: Support & contact / Apoyo y contacto
         type: object
@@ -294,55 +294,56 @@ content:
         label: Group name (English) / Nombre del grupo (inglés)
         type: string
 
-  - name: tienda
-    label: Shop / Tienda
-    type: collection
-    path: content/tienda
-    format: yaml
-    operations:
-      rename: false
-    filename:
-      template: "{year}-{month}-{day}-{hour}{minute}{second}.yml"
-      field: false
-    view:
-      fields: [imagen, nombre, precio, agotado]
-      primary: nombre
-    fields:
-      - name: nombre
-        label: Name (Spanish) / Nombre (español)
-        type: string
-        required: true
-      - name: name
-        label: Name (English) / Nombre (inglés)
-        type: string
-      - name: imagen
-        label: Photo / Foto
-        type: image
-        required: true
-        options:
-          media: images
-        description: "Square photos look best. / Las fotos cuadradas se ven mejor."
-      - name: precio
-        label: Price in dollars / Precio en dólares
-        type: number
-      - name: descripcion
-        label: Description (Spanish) / Descripción (español)
-        type: text
-      - name: description
-        label: Description (English) / Descripción (inglés)
-        type: text
-      - name: artista
-        label: Artist (optional, only with her consent) / Artista (opcional, solo con su permiso)
-        type: string
-      - name: enlace
-        label: Payment link / Enlace de pago
-        type: string
-        description: "The PayPal, Stripe or Square payment link for this piece. Empty = the Buy button is shown greyed out. / El enlace de pago de PayPal, Stripe o Square para esta pieza. Vacío = el botón Comprar aparece en gris."
-      - name: agotado
-        label: Sold out / Agotado
-        type: boolean
-        default: false
-        description: "The piece stays visible with a «Sold out» label, without the Buy button. / La pieza sigue visible con la etiqueta «Agotado», sin el botón Comprar."
+  # Shop: hidden for now (site.tienda is false in eleventy.config.js). Uncomment to bring it back.
+#  - name: tienda
+#    label: Shop / Tienda
+#    type: collection
+#    path: content/tienda
+#    format: yaml
+#    operations:
+#      rename: false
+#    filename:
+#      template: "{year}-{month}-{day}-{hour}{minute}{second}.yml"
+#      field: false
+#    view:
+#      fields: [imagen, nombre, precio, agotado]
+#      primary: nombre
+#    fields:
+#      - name: nombre
+#        label: Name (Spanish) / Nombre (español)
+#        type: string
+#        required: true
+#      - name: name
+#        label: Name (English) / Nombre (inglés)
+#        type: string
+#      - name: imagen
+#        label: Photo / Foto
+#        type: image
+#        required: true
+#        options:
+#          media: images
+#        description: "Square photos look best. / Las fotos cuadradas se ven mejor."
+#      - name: precio
+#        label: Price in dollars / Precio en dólares
+#        type: number
+#      - name: descripcion
+#        label: Description (Spanish) / Descripción (español)
+#        type: text
+#      - name: description
+#        label: Description (English) / Descripción (inglés)
+#        type: text
+#      - name: artista
+#        label: Artist (optional, only with her consent) / Artista (opcional, solo con su permiso)
+#        type: string
+#      - name: enlace
+#        label: Payment link / Enlace de pago
+#        type: string
+#        description: "The PayPal, Stripe or Square payment link for this piece. Empty = the Buy button is shown greyed out. / El enlace de pago de PayPal, Stripe o Square para esta pieza. Vacío = el botón Comprar aparece en gris."
+#      - name: agotado
+#        label: Sold out / Agotado
+#        type: boolean
+#        default: false
+#        description: "The piece stays visible with a «Sold out» label, without the Buy button. / La pieza sigue visible con la etiqueta «Agotado», sin el botón Comprar."
 
   - name: testimonios
     label: Testimonials / Testimonios

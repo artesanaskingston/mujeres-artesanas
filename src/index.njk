@@ -369,7 +369,7 @@ footer a{color:#fff}
       <a href="#quienes-somos" data-view="quienes-somos"><span class="es">Quiénes somos</span><span class="en">About</span></a>
       <a href="#talleres" data-view="talleres"><span class="es">Talleres y eventos</span><span class="en">Workshops &amp; events</span></a>
       <a href="#galeria" data-view="galeria"><span class="es">Galería</span><span class="en">Gallery</span></a>
-      <a href="#tienda" data-view="tienda"><span class="es">Tienda</span><span class="en">Shop</span></a>
+      {% if site.tienda %}<a href="#tienda" data-view="tienda"><span class="es">Tienda</span><span class="en">Shop</span></a>{% endif %}
       <a href="#apoyo" data-view="apoyo"><span class="es">Apoyo y contacto</span><span class="en">Support &amp; contact</span></a>
       <a href="#apoyo" class="nav-donar"><span class="es">Donar</span><span class="en">Donate</span></a>
     </nav>
@@ -671,6 +671,7 @@ footer a{color:#fff}
 </div>
 
 <!-- ============ TIENDA ============ -->
+{%- if site.tienda %}
 <div class="view" id="v-tienda" data-c="dkgreen">
   <div class="pagehead">
     <div class="banner" style="background-image:{% fondo encabezados.tienda.imagen %};background-position:{{ encabezados.tienda.posicion | posicion }}" role="img" aria-label=""></div>
@@ -710,6 +711,7 @@ footer a{color:#fff}
 </div>
 
 <!-- ============ APOYO ============ -->
+{%- endif %}
 <div class="view" id="v-apoyo" data-c="blue">
   <div class="pagehead">
     {%- if encabezados.apoyo.imagen %}
@@ -783,7 +785,7 @@ footer a{color:#fff}
     <a href="#quienes-somos" data-view="quienes-somos"><span class="es">Quiénes somos</span><span class="en">About</span></a>
     <a href="#talleres" data-view="talleres"><span class="es">Talleres y eventos</span><span class="en">Workshops &amp; events</span></a>
     <a href="#galeria" data-view="galeria"><span class="es">Galería</span><span class="en">Gallery</span></a>
-    <a href="#tienda" data-view="tienda"><span class="es">Tienda</span><span class="en">Shop</span></a>
+    {% if site.tienda %}<a href="#tienda" data-view="tienda"><span class="es">Tienda</span><span class="en">Shop</span></a>{% endif %}
     <a href="#apoyo" data-view="apoyo"><span class="es">Apoyo y contacto</span><span class="en">Support &amp; contact</span></a>
   </nav>
   <div class="wrap">
@@ -800,7 +802,7 @@ footer a{color:#fff}
 <script>
 {% raw %}
 (function(){
-  var views=["inicio","quienes-somos","talleres","galeria","tienda","apoyo"];
+  var views=[].map.call(document.querySelectorAll(".view"),function(v){return v.id.slice(2)});
   function show(){
     var h=(location.hash||"").replace("#","");
     if(views.indexOf(h)<0) h="inicio";
