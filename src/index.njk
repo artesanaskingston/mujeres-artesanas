@@ -337,6 +337,12 @@ footer a{color:#fff}
 .foot-nav a:hover{opacity:1;text-decoration:underline}
 .foot-nav a.on{opacity:1;border-color:#fff}
 .fine{opacity:.75;font-size:.8rem}
+.credit{display:inline-flex;align-items:center;gap:6px;margin-top:6px}
+.credit-logo{display:inline-block;width:8px;height:20px;background:var(--yellow);
+  -webkit-mask:url(img/tsjuri.png) center/contain no-repeat;mask:url(img/tsjuri.png) center/contain no-repeat;
+  animation:tsjuri 12s linear infinite}
+@keyframes tsjuri{0%,100%{background:var(--yellow)}20%{background:var(--orange)}40%{background:var(--magenta)}60%{background:var(--blue)}80%{background:var(--teal)}}
+@media (prefers-reduced-motion:reduce){.credit-logo{animation:none}}
 .deco{position:absolute;pointer-events:none}
 .rel{position:relative}
 {% endraw %}
@@ -786,7 +792,7 @@ footer a{color:#fff}
       <div class="name">Mujeres Artesanas de Kingston</div>
       231 Clinton Ave., Kingston, NY 12401<br>{{ site.email | emails | safe }}
     </div>
-    <div class="fine" style="text-align:right"><span class="es">Patrocinio fiscal:</span><span class="en">Fiscally sponsored by</span> Circle Creative Collective<br>© 2026 Mujeres Artesanas de Kingston</div>
+    <div class="fine" style="text-align:right"><span class="es">Patrocinio fiscal:</span><span class="en">Fiscally sponsored by</span> Circle Creative Collective<br>© 2026 Mujeres Artesanas de Kingston<br><span class="credit"><span><span class="es">Sitio web por</span><span class="en">Website by</span> Tsjuri!</span><span class="credit-logo" aria-hidden="true"></span></span></div>
   </div>
 </footer>
 
