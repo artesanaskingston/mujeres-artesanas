@@ -8,14 +8,18 @@ export default {
     const password = env.SITE_PASSWORD;
     if (password) {
       const header = request.headers.get("Authorization") || "";
-      let given = "";
+      // Browsers send the login as UTF-8 or Latin-1 bytes (matters for ñ, á, …); accept both.
+      const tries = [];
       if (header.startsWith("Basic ")) {
         try {
-          const decoded = atob(header.slice(6));
-          given = decoded.slice(decoded.indexOf(":") + 1);
+          const bytes = atob(header.slice(6).trim());
+          const utf8 = new TextDecoder().decode(Uint8Array.from(bytes, (c) => c.charCodeAt(0)));
+          for (const decoded of [utf8, bytes]) tries.push(decoded.slice(decoded.indexOf(":") + 1).normalize("NFC"));
         } catch {}
       }
-      if (!(await sameText(given, password))) {
+      let ok = false;
+      for (const given of tries) if (await sameText(given, password.normalize("NFC"))) ok = true;
+      if (!ok) {
         return new Response("Sitio en preparación / Site in preparation", {
           status: 401,
           headers: {
