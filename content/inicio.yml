@@ -1,17 +1,25 @@
-lema: "Un espacio seguro donde mujeres inmigrantes hispanohablantes crean arte, comparten sus tradiciones y se apoyan unas a otras."
-tagline: "A safe space where Spanish-speaking immigrant women make art, share their traditions and support one another."
-titulo_mes: "Un taller, una conversación, una comida"
-title_month: "A workshop, a conversation, a meal"
+lema: Un espacio seguro donde mujeres inmigrantes hispanohablantes crean arte,
+  comparten sus tradiciones y se apoyan unas a otras.
+tagline: A safe space where Spanish-speaking immigrant women make art, share
+  their traditions and support one another.
+titulo_mes: Un taller, una conversación, una comida
+title_month: A workshop, a conversation, a meal.
 tarjetas:
   - titulo: Talleres de arte
     title: Art workshops
-    texto: "Pintura, tejido, cerámica, grabado y más, guiados por las propias integrantes, artistas invitadas y talleres locales."
-    text: "Painting, weaving, ceramics, printmaking and more, led by members, guest artists and local studios."
+    texto: Pintura, tejido, cerámica, grabado y más, guiados por las propias
+      integrantes, artistas invitadas y talleres locales.
+    text: Painting, weaving, ceramics, printmaking and more, led by members, guest
+      artists and local studios.
   - titulo: Conversación facilitada
     title: Facilitated conversation
-    texto: "Cada encuentro empieza con una meditación. Una terapeuta de artes creativas acompaña al grupo cuando hace falta."
-    text: "Each gathering opens with a meditation. A creative arts therapist supports the group when needed."
+    texto: Cada encuentro empieza con una meditación. Una terapeuta de artes
+      creativas acompaña al grupo cuando hace falta.
+    text: Each gathering opens with a meditation. A creative arts therapist supports
+      the group when needed.
   - titulo: Comida compartida
     title: A shared meal
-    texto: "Terminamos con una comida, a menudo de vendedores latinoamericanos locales, para probar los sabores de cada país."
-    text: "We end with a meal, often from local Latin American vendors, tasting the foods of each other's countries."
+    texto: Terminamos con una comida, a menudo de vendedores latinoamericanos
+      locales, para probar los sabores de cada país.
+    text: We end with a meal, often from local Latin American vendors, tasting the
+      foods of each other's countries.
